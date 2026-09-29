@@ -1,0 +1,114 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Track Order #{{ order.id }} — Campus Canteen{% endblock %}
+{% block page_title %}Live Order Tracker{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'orders' %}
+
+<div class="track-order card" data-order-id="{{ order.id }}">
+    <div class="track-header">
+        <div>
+            <h2>Order #{{ order.id }}</h2>
+            <p class="text-muted">Placed on {{ order.created_at.strftime('%b %d, %Y at %I:%M %p') if order.created_at else '' }}</p>
+        </div>
+        <div class="track-status-pill">
+            <span class="status-badge status-{{ order.status }} status-badge-lg" id="liveStatusBadge">{{ order.status|title }}</span>
+        </div>
+    </div>
+
+    <!-- Visual Order Tracking Timeline -->
+    <div class="timeline-wrapper">
+        <div class="timeline" id="orderTimeline">
+            {% set steps = ['pending', 'confirmed', 'preparing', 'ready', 'completed'] %}
+            {% set labels = {
+                'pending': {'title': 'Order Placed', 'desc': 'Received by canteen'},
+                'confirmed': {'title': 'Confirmed', 'desc': 'Kitchen accepted order'},
+                'preparing': {'title': 'Preparing', 'desc': 'Cooking your fresh meal'},
+                'ready': {'title': 'Ready for Pickup', 'desc': 'Collect at canteen counter'},
+                'completed': {'title': 'Completed', 'desc': 'Order collected'}
+            } %}
+
+            {% if order.status == 'cancelled' %}
+                <div class="timeline-cancelled-box">
+                    <i class="fas fa-times-circle"></i>
+                    <h3>This order was cancelled</h3>
+                    <p>If you have any questions, please contact the canteen counter.</p>
+                </div>
+            {% else %}
+                {% set status_index = steps.index(order.status) if order.status in steps else 0 %}
+                {% for step in steps %}
+                <div class="timeline-step {% if loop.index0 < status_index %}done{% elif loop.index0 == status_index %}active{% endif %}">
+                    <div class="timeline-marker">
+                        {% if loop.index0 < status_index %}
+                            <i class="fas fa-check"></i>
+                        {% elif loop.index0 == status_index %}
+                            <span class="pulse-dot"></span>
+                        {% else %}
+                            <span class="step-num-dot">{{ loop.index }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="timeline-info">
+                        <strong class="timeline-title">{{ labels[step].title }}</strong>
+                        <small class="timeline-desc text-muted">{{ labels[step].desc }}</small>
+                    </div>
+                    {% if not loop.last %}
+                        <div class="timeline-line {% if loop.index0 < status_index %}line-done{% endif %}"></div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Order Details Summary Box -->
+    <div class="track-details-box">
+        <div class="track-details-grid">
+            <div>
+                <span class="text-muted">Pickup Option:</span>
+                <strong>{{ order.pickup_time }}</strong>
+            </div>
+            <div>
+                <span class="text-muted">Payment:</span>
+                <strong>{{ order.payment_method|title }} ({{ order.payment_status|title }})</strong>
+            </div>
+            <div>
+                <span class="text-muted">Total Amount:</span>
+                <strong class="price-text">Rs. {{ '%.0f'|format(order.total_amount) }}</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Items breakdown -->
+    <div class="track-items-box">
+        <h3>Order Items</h3>
+        <ul class="order-items-compact">
+            {% for item in order.items %}
+            <li>
+                <span>{{ item.menu_item.name }} × {{ item.quantity }}</span>
+                <strong>Rs. {{ '%.0f'|format(item.price * item.quantity) }}</strong>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="track-footer-note">
+        <p><i class="fas fa-sync-alt fa-spin"></i> Live Status updates automatically in real time.</p>
+        <div class="track-actions">
+            <a href="{{ url_for('student.orders') }}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> My Active Orders
+            </a>
+            <a href="{{ url_for('student.order_detail', order_id=order.id) }}" class="btn btn-secondary">
+                View Full Receipt
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    OrderTracker.init({{ order.id }});
+});
+</script>
+{% endblock %}

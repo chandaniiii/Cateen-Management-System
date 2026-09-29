@@ -1,0 +1,82 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Menu Management — Admin Console{% endblock %}
+{% block page_title %}Food Menu Management{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'menu' %}
+
+<div class="page-header-row">
+    <div>
+        <h2>Menu Catalog ({{ items|length }} Items)</h2>
+        <p class="text-muted">Manage available canteen food dishes, pricing, inventory stock, and availability</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('admin.add_menu_item') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Food Item
+        </a>
+    </div>
+</div>
+
+<div class="table-responsive card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Food Item Name</th>
+                <th>Category</th>
+                <th>Price (NPR)</th>
+                <th>Current Stock</th>
+                <th>Threshold</th>
+                <th>Stock Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>
+                    <img src="{{ item.image or url_for('static', filename='images/food-placeholder.svg') }}" alt="{{ item.name }}" class="table-thumb-img">
+                </td>
+                <td>
+                    <strong>{{ item.name }}</strong>
+                    <small class="text-muted d-block">{{ item.description[:50] }}{% if item.description|length > 50 %}...{% endif %}</small>
+                </td>
+                <td><span class="badge badge-subtle">{{ item.category.name }}</span></td>
+                <td><strong class="price-text">Rs. {{ '%.0f'|format(item.price) }}</strong></td>
+                <td><strong>{{ item.stock }}</strong></td>
+                <td><span class="text-muted">Min: {{ item.minimum_stock }}</span></td>
+                <td>
+                    {% if item.stock_status == 'out_of_stock' %}
+                        <span class="availability out">Out of Stock</span>
+                    {% elif item.stock_status == 'low_stock' %}
+                        <span class="availability low">Low Stock</span>
+                    {% else %}
+                        <span class="availability in">Available</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="actions-cell">
+                        <a href="{{ url_for('admin.edit_menu_item', item_id=item.id) }}" class="btn btn-xs btn-outline" title="Edit Item">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <form method="POST" action="{{ url_for('admin.delete_menu_item', item_id=item.id) }}" class="inline-form confirm-form" data-confirm="Are you sure you want to permanently delete '{{ item.name }}'?">
+                            <button type="submit" class="btn btn-xs btn-danger" title="Delete Item">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    ConfirmActions.init();
+});
+</script>
+{% endblock %}

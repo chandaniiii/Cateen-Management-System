@@ -1,0 +1,84 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Active Orders — Campus Canteen{% endblock %}
+{% block page_title %}Active Orders{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'orders' %}
+
+<div class="page-header-row">
+    <div>
+        <h2>Active Orders</h2>
+        <p class="text-muted">Orders currently in progress (Pending, Confirmed, Preparing, or Ready for pickup)</p>
+    </div>
+    <a href="{{ url_for('student.menu') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Place New Order
+    </a>
+</div>
+
+{% if orders %}
+<div class="orders-cards-grid">
+    {% for order in orders %}
+    <div class="order-card card">
+        <div class="order-card-header">
+            <div class="order-card-id-block">
+                <span class="order-num">Order #{{ order.id }}</span>
+                <small class="text-muted">{{ order.created_at.strftime('%b %d, %Y (%I:%M %p)') if order.created_at else '' }}</small>
+            </div>
+            <span class="status-badge status-{{ order.status }}">{{ order.status|title }}</span>
+        </div>
+
+        <div class="order-card-items-preview">
+            <ul>
+                {% for item in order.items %}
+                <li>
+                    <span>{{ item.menu_item.name }} × {{ item.quantity }}</span>
+                    <span>Rs. {{ '%.0f'|format(item.price * item.quantity) }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="order-card-meta">
+            <div>
+                <span class="meta-label">Total</span>
+                <strong class="price-text">Rs. {{ '%.0f'|format(order.total_amount) }}</strong>
+            </div>
+            <div>
+                <span class="meta-label">Pickup Time</span>
+                <span>{{ order.pickup_time }}</span>
+            </div>
+            <div>
+                <span class="meta-label">Payment</span>
+                <span>{{ order.payment_method|title }} ({{ order.payment_status|title }})</span>
+            </div>
+        </div>
+
+        <div class="order-card-actions">
+            <a href="{{ url_for('student.track_order', order_id=order.id) }}" class="btn btn-primary btn-sm">
+                <i class="fas fa-map-marker-alt"></i> Live Track
+            </a>
+            <a href="{{ url_for('student.order_detail', order_id=order.id) }}" class="btn btn-outline btn-sm">
+                Details & Receipt
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state card">
+    <div class="empty-icon-wrapper">
+        <i class="fas fa-receipt"></i>
+    </div>
+    <h2>No active orders right now</h2>
+    <p>You don't have any ongoing orders in the kitchen queue. Hungry?</p>
+    <div class="empty-actions">
+        <a href="{{ url_for('student.menu') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-utensils"></i> Order Food Now
+        </a>
+        <a href="{{ url_for('student.order_history') }}" class="btn btn-outline btn-lg">
+            <i class="fas fa-history"></i> View Order History
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

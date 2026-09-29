@@ -1,0 +1,133 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Staff Operations Dashboard — Campus Canteen{% endblock %}
+{% block page_title %}Canteen Staff Dashboard{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'dashboard' %}
+
+<div class="welcome-banner card">
+    <div class="welcome-text">
+        <h1>Welcome, Kitchen Staff 👨‍🍳</h1>
+        <p>Manage incoming student orders, preparation pipeline, and food pickups.</p>
+    </div>
+    <div class="welcome-action">
+        <a href="{{ url_for('staff.orders', status='new') }}" class="btn btn-primary">
+            <i class="fas fa-bell"></i> View Incoming Orders ({{ pending }})
+        </a>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon-wrapper stat-icon-orders"><i class="fas fa-calendar-day"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Today's Orders</span>
+            <span class="stat-value">{{ today_orders }}</span>
+        </div>
+    </div>
+    <div class="stat-card stat-warning">
+        <div class="stat-icon-wrapper stat-icon-pending"><i class="fas fa-clock"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Pending / New</span>
+            <span class="stat-value">{{ pending }}</span>
+        </div>
+    </div>
+    <div class="stat-card stat-preparing">
+        <div class="stat-icon-wrapper stat-icon-prep"><i class="fas fa-fire"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Now Preparing</span>
+            <span class="stat-value">{{ preparing }}</span>
+        </div>
+    </div>
+    <div class="stat-card stat-success">
+        <div class="stat-icon-wrapper stat-icon-completed"><i class="fas fa-check-circle"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Completed Today</span>
+            <span class="stat-value">{{ completed_today }}</span>
+        </div>
+    </div>
+    <div class="stat-card stat-revenue">
+        <div class="stat-icon-wrapper stat-icon-rev"><i class="fas fa-coins"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Today's Revenue</span>
+            <span class="stat-value price-text">Rs. {{ '%.0f'|format(revenue_today) }}</span>
+        </div>
+    </div>
+</div>
+
+<section class="section-inline">
+    <div class="section-header-row">
+        <div>
+            <h2>Order Management Feed</h2>
+            <p class="text-muted">Live incoming and in-progress orders requiring staff attention</p>
+        </div>
+        <div class="header-actions">
+            <a href="{{ url_for('staff.orders', status='all') }}" class="btn btn-outline btn-sm">
+                <i class="fas fa-list"></i> All Orders Table
+            </a>
+        </div>
+    </div>
+
+    <div class="table-responsive card">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Student Name</th>
+                    <th>Ordered Items</th>
+                    <th>Total</th>
+                    <th>Pickup Time</th>
+                    <th>Time Placed</th>
+                    <th>Status</th>
+                    <th>Workflow Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('staff.order_detail', order_id=order.id) }}" class="order-id-link">
+                            <strong>#{{ order.id }}</strong>
+                        </a>
+                    </td>
+                    <td>
+                        <div class="user-cell">
+                            <strong>{{ order.user.name }}</strong>
+                            <small class="text-muted">{{ order.user.phone or order.user.student_id or '' }}</small>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="items-summary-text">
+                            {% for item in order.items %}
+                                {{ item.menu_item.name }} × {{ item.quantity }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </span>
+                    </td>
+                    <td><strong class="price-text">Rs. {{ '%.0f'|format(order.total_amount) }}</strong></td>
+                    <td><span class="badge badge-subtle">{{ order.pickup_time }}</span></td>
+                    <td>{{ order.created_at.strftime('%I:%M %p') if order.created_at else '' }}</td>
+                    <td><span class="status-badge status-{{ order.status }}">{{ order.status|title }}</span></td>
+                    <td>
+                        {% include 'partials/order_status_actions.html' %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" class="text-center py-4">
+                        <p class="text-muted"><i class="fas fa-check-circle"></i> No orders requiring processing at this moment.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    ConfirmActions.init();
+});
+</script>
+{% endblock %}

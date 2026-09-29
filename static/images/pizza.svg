@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5eb"/>
+      <stop offset="100%" stop-color="#fed7aa"/>
+    </linearGradient>
+    <linearGradient id="crust" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b45309"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  
+  <!-- Pizza Slice -->
+  <g filter="url(#shadow)">
+    <!-- Base Dough & Crust -->
+    <path d="M200,240 L110,80 Q200,45 290,80 Z" fill="#fde047"/>
+    <!-- Crust Rim -->
+    <path d="M105,75 Q200,40 295,75 Q290,95 285,90 Q200,60 115,90 Z" fill="url(#crust)"/>
+    <!-- Tomato sauce underlay -->
+    <path d="M200,230 L120,95 Q200,70 280,95 Z" fill="#ef4444"/>
+    <!-- Cheese Layer -->
+    <path d="M200,230 L124,100 Q200,75 276,100 Z" fill="#fef08a"/>
+    
+    <!-- Pepperoni Slices -->
+    <circle cx="170" cy="120" r="14" fill="#b91c1c" stroke="#991b1b" stroke-width="2"/>
+    <circle cx="230" cy="125" r="14" fill="#b91c1c" stroke="#991b1b" stroke-width="2"/>
+    <circle cx="200" cy="165" r="13" fill="#b91c1c" stroke="#991b1b" stroke-width="2"/>
+    <circle cx="165" cy="180" r="10" fill="#b91c1c" stroke="#991b1b" stroke-width="1.5"/>
+    
+    <!-- Olive rings (black/dark green) -->
+    <circle cx="195" cy="115" r="6" fill="#1e293b"/>
+    <circle cx="195" cy="115" r="3" fill="#fef08a"/>
+    
+    <circle cx="240" cy="170" r="6" fill="#1e293b"/>
+    <circle cx="240" cy="170" r="3" fill="#fef08a"/>
+
+    <!-- Green Pepper pieces -->
+    <path d="M140,150 Q150,140 160,152" fill="none" stroke="#16a34a" stroke-width="4" stroke-linecap="round"/>
+    <path d="M210,195 Q220,185 230,198" fill="none" stroke="#16a34a" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Melted cheese pull drip at tip -->
+    <path d="M198,230 Q200,250 202,230" fill="#fef08a"/>
+  </g>
+</svg>

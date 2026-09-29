@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5eb"/>
+      <stop offset="100%" stop-color="#fed7aa"/>
+    </linearGradient>
+    <linearGradient id="steamer" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  
+  <!-- Steamer Basket Plate -->
+  <ellipse cx="200" cy="180" rx="140" ry="70" fill="url(#steamer)" filter="url(#shadow)"/>
+  <ellipse cx="200" cy="175" rx="130" ry="60" fill="#fef3c7"/>
+  <ellipse cx="200" cy="170" rx="120" ry="52" fill="#fffbeb" stroke="#f59e0b" stroke-width="3"/>
+  
+  <!-- Steaming Momo Dumplings -->
+  <!-- Left Momo -->
+  <g transform="translate(130, 140)">
+    <path d="M0,25 C-15,25 -25,10 -20,-5 C-15,-20 0,-25 0,-25 C0,-25 15,-20 20,-5 C25,10 15,25 0,25 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+    <path d="M-10,-5 Q0,-20 10,-5" fill="none" stroke="#cbd5e1" stroke-width="2"/>
+    <circle cx="0" cy="-22" r="3" fill="#f59e0b"/>
+  </g>
+  
+  <!-- Right Momo -->
+  <g transform="translate(270, 140)">
+    <path d="M0,25 C-15,25 -25,10 -20,-5 C-15,-20 0,-25 0,-25 C0,-25 15,-20 20,-5 C25,10 15,25 0,25 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+    <path d="M-10,-5 Q0,-20 10,-5" fill="none" stroke="#cbd5e1" stroke-width="2"/>
+    <circle cx="0" cy="-22" r="3" fill="#f59e0b"/>
+  </g>
+
+  <!-- Top Momo -->
+  <g transform="translate(200, 115)">
+    <path d="M0,25 C-15,25 -25,10 -20,-5 C-15,-20 0,-25 0,-25 C0,-25 15,-20 20,-5 C25,10 15,25 0,25 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+    <path d="M-10,-5 Q0,-20 10,-5" fill="none" stroke="#cbd5e1" stroke-width="2"/>
+    <circle cx="0" cy="-22" r="3" fill="#f59e0b"/>
+  </g>
+
+  <!-- Center Chutney / Achar Bowl -->
+  <ellipse cx="200" cy="165" rx="35" ry="22" fill="#e11d48" filter="url(#shadow)"/>
+  <ellipse cx="200" cy="163" rx="30" ry="17" fill="#f43f5e"/>
+  <circle cx="195" cy="160" r="3" fill="#fbbf24"/>
+  <circle cx="205" cy="165" r="2" fill="#10b981"/>
+
+  <!-- Bottom Momo -->
+  <g transform="translate(150, 180)">
+    <path d="M0,22 C-14,22 -22,8 -18,-4 C-14,-16 0,-22 0,-22 C0,-22 14,-16 18,-4 C22,8 14,22 0,22 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+    <circle cx="0" cy="-19" r="2.5" fill="#f59e0b"/>
+  </g>
+
+  <g transform="translate(250, 180)">
+    <path d="M0,22 C-14,22 -22,8 -18,-4 C-14,-16 0,-22 0,-22 C0,-22 14,-16 18,-4 C22,8 14,22 0,22 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+    <circle cx="0" cy="-19" r="2.5" fill="#f59e0b"/>
+  </g>
+
+  <!-- Steam lines -->
+  <path d="M160,85 Q150,65 160,45" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  <path d="M200,75 Q190,55 200,35" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+  <path d="M240,85 Q250,65 240,45" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+</svg>

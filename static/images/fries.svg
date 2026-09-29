@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5eb"/>
+      <stop offset="100%" stop-color="#fed7aa"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  
+  <!-- Base Shadow -->
+  <ellipse cx="200" cy="245" rx="80" ry="15" fill="#cbd5e1" opacity="0.6"/>
+  
+  <!-- Golden Fries spilling up -->
+  <g>
+    <!-- Back fries -->
+    <rect x="140" y="60" width="16" height="120" rx="3" fill="#f59e0b" transform="rotate(-15 140 60)"/>
+    <rect x="170" y="50" width="16" height="130" rx="3" fill="#fbbf24" transform="rotate(-5 170 50)"/>
+    <rect x="200" y="45" width="16" height="135" rx="3" fill="#f59e0b" transform="rotate(3 200 45)"/>
+    <rect x="230" y="55" width="16" height="125" rx="3" fill="#fbbf24" transform="rotate(12 230 55)"/>
+    <rect x="250" y="70" width="16" height="110" rx="3" fill="#f59e0b" transform="rotate(22 250 70)"/>
+    
+    <!-- Mid fries -->
+    <rect x="155" y="75" width="16" height="110" rx="3" fill="#fbbf24" transform="rotate(-8 155 75)"/>
+    <rect x="185" y="65" width="16" height="120" rx="3" fill="#fde047" transform="rotate(0 185 65)"/>
+    <rect x="215" y="70" width="16" height="115" rx="3" fill="#fde047" transform="rotate(8 215 70)"/>
+    <rect x="240" y="85" width="16" height="100" rx="3" fill="#f59e0b" transform="rotate(18 240 85)"/>
+  </g>
+  
+  <!-- Red Fry Box / Container -->
+  <g filter="url(#shadow)">
+    <path d="M130,140 L270,140 L250,240 L150,240 Z" fill="#dc2626"/>
+    <!-- Curved front lip -->
+    <path d="M130,140 Q200,165 270,140 L250,240 L150,240 Z" fill="#ef4444"/>
+    <!-- Yellow Canteen Emblem / Stripe -->
+    <path d="M185,185 Q200,170 215,185 Q200,200 185,185 Z" fill="#fbbf24"/>
+  </g>
+</svg>

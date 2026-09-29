@@ -1,0 +1,27 @@
+<nav class="navbar public-nav">
+    <div class="container nav-inner">
+        <a href="{{ url_for('main.index') }}" class="brand">
+            <span class="brand-icon">🍽️</span>
+            <span class="brand-text">Campus Canteen</span>
+        </a>
+        <button class="nav-toggle" id="publicNavToggle" aria-label="Toggle navigation menu">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links" id="publicNavLinks">
+            <li><a href="{{ url_for('main.index') }}" class="nav-item">Home</a></li>
+            <li><a href="{{ url_for('main.index') }}#popular" class="nav-item">Popular</a></li>
+            <li><a href="{{ url_for('main.index') }}#how-it-works" class="nav-item">How It Works</a></li>
+            <li><a href="{{ url_for('main.about') }}" class="nav-item">About</a></li>
+            {% if session_user %}
+                <li>
+                    <a href="{{ url_for('main.dashboard_redirect') }}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-th-large"></i> Dashboard ({{ session_user.name.split()[0] }})
+                    </a>
+                </li>
+            {% else %}
+                <li><a href="{{ url_for('auth.login') }}" class="nav-link-login">Login</a></li>
+                <li><a href="{{ url_for('auth.register') }}" class="btn btn-sm btn-primary">Get Started</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

@@ -1,0 +1,49 @@
+{% extends "dashboard_base.html" %}
+{% block title %}My Profile — Campus Canteen{% endblock %}
+{% block page_title %}Student Profile{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'profile' %}
+
+<div class="profile-layout">
+    <div class="profile-card card">
+        <div class="profile-avatar">{{ user.name[0]|upper }}</div>
+        <h2>{{ user.name }}</h2>
+        <span class="user-role-tag role-{{ user.role }}">{{ user.role|title }}</span>
+
+        <dl class="profile-details-list">
+            <div class="profile-detail-row">
+                <dt><i class="fas fa-envelope"></i> Email</dt>
+                <dd>{{ user.email }}</dd>
+            </div>
+            <div class="profile-detail-row">
+                <dt><i class="fas fa-id-card"></i> Student ID</dt>
+                <dd>{{ user.student_id or 'Not specified' }}</dd>
+            </div>
+            <div class="profile-detail-row">
+                <dt><i class="fas fa-phone"></i> Phone Number</dt>
+                <dd>{{ user.phone or 'Not specified' }}</dd>
+            </div>
+            <div class="profile-detail-row">
+                <dt><i class="fas fa-shield-alt"></i> Account Status</dt>
+                <dd><span class="badge badge-success">{{ user.status|title }}</span></dd>
+            </div>
+            <div class="profile-detail-row">
+                <dt><i class="fas fa-calendar-check"></i> Member Since</dt>
+                <dd>{{ user.created_at.strftime('%B %d, %Y') if user.created_at else 'N/A' }}</dd>
+            </div>
+        </dl>
+
+        <div class="profile-actions">
+            <a href="{{ url_for('student.orders') }}" class="btn btn-outline btn-block">
+                <i class="fas fa-receipt"></i> View My Orders
+            </a>
+            <form action="{{ url_for('auth.logout') }}" method="POST" class="mt-2">
+                <button type="submit" class="btn btn-danger btn-block">
+                    <i class="fas fa-sign-out-alt"></i> Sign Out
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

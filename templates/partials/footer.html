@@ -1,0 +1,44 @@
+<footer class="site-footer">
+    <div class="container footer-grid">
+        <div class="footer-brand">
+            <div class="footer-logo">
+                <span class="brand-icon">🍽️</span>
+                <h3>Campus Canteen</h3>
+            </div>
+            <p>Your premier campus dining platform. Order online in seconds, skip the rush hour lines, and enjoy fresh homemade food.</p>
+            <div class="footer-socials">
+                <span class="badge badge-subtle">College Canteen System v1.0</span>
+            </div>
+        </div>
+        <div class="footer-links">
+            <h4>Quick Navigation</h4>
+            <ul>
+                <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                <li><a href="{{ url_for('main.index') }}#popular">Popular Foods</a></li>
+                <li><a href="{{ url_for('main.index') }}#how-it-works">How It Works</a></li>
+                <li><a href="{{ url_for('main.about') }}">About Canteen</a></li>
+            </ul>
+        </div>
+        <div class="footer-links">
+            <h4>User Portals</h4>
+            <ul>
+                <li><a href="{{ url_for('auth.login') }}">Student / Staff Login</a></li>
+                <li><a href="{{ url_for('auth.register') }}">Student Registration</a></li>
+                <li><a href="{{ url_for('auth.login') }}">Staff Portal</a></li>
+                <li><a href="{{ url_for('auth.login') }}">Admin Console</a></li>
+            </ul>
+        </div>
+        <div class="footer-contact">
+            <h4>Canteen Contact</h4>
+            <p><i class="fas fa-map-marker-alt"></i> College Main Campus Block<br>Kathmandu, Nepal</p>
+            <p><i class="fas fa-clock"></i> 7:00 AM – 8:00 PM (Daily)</p>
+            <p><i class="fas fa-phone-alt"></i> +977 9801111111</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container footer-bottom-inner">
+            <p>&copy; {{ current_year }} Campus Canteen Management System. All rights reserved.</p>
+            <p class="footer-demo-tag"><i class="fas fa-shield-alt"></i> Secure College Dining Platform</p>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,74 @@
+{% extends "dashboard_base.html" %}
+{% block title %}User Management — Admin Console{% endblock %}
+{% block page_title %}User Account Management{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'users' %}
+
+<div class="page-header-row">
+    <div>
+        <h2>Registered Users ({{ users|length }})</h2>
+        <p class="text-muted">Manage student, staff, and administrator accounts, roles, and access statuses</p>
+    </div>
+</div>
+
+<div class="table-responsive card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>User Details</th>
+                <th>Student ID</th>
+                <th>Phone Number</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Registered On</th>
+                <th>Manage Role & Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>
+                    <div class="user-cell">
+                        <span class="avatar-circle-sm">{{ user.name[0]|upper }}</span>
+                        <div>
+                            <strong>{{ user.name }}</strong>
+                            <small class="text-muted d-block">{{ user.email }}</small>
+                        </div>
+                    </div>
+                </td>
+                <td>{{ user.student_id or '—' }}</td>
+                <td>{{ user.phone or '—' }}</td>
+                <td><span class="user-role-tag role-{{ user.role }}">{{ user.role|title }}</span></td>
+                <td>
+                    <span class="badge {% if user.status == 'active' %}badge-success{% else %}badge-danger{% endif %}">
+                        {{ user.status|title }}
+                    </span>
+                </td>
+                <td>{{ user.created_at.strftime('%b %d, %Y') if user.created_at else '' }}</td>
+                <td>
+                    {% if user.id == session_user.id %}
+                        <small class="text-muted"><i class="fas fa-lock"></i> Current Logged In Account</small>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('admin.update_user', user_id=user.id) }}" class="user-update-form">
+                            <select name="role" class="select-sm">
+                                <option value="student" {% if user.role == 'student' %}selected{% endif %}>Student</option>
+                                <option value="staff" {% if user.role == 'staff' %}selected{% endif %}>Staff</option>
+                                <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                            </select>
+                            <select name="status" class="select-sm">
+                                <option value="active" {% if user.status == 'active' %}selected{% endif %}>Active</option>
+                                <option value="inactive" {% if user.status == 'inactive' %}selected{% endif %}>Inactive</option>
+                            </select>
+                            <button type="submit" class="btn btn-xs btn-primary">
+                                <i class="fas fa-save"></i> Save
+                            </button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

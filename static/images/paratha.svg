@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5eb"/>
+      <stop offset="100%" stop-color="#fed7aa"/>
+    </linearGradient>
+    <linearGradient id="parathaDough" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#fde047"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  
+  <!-- Plate -->
+  <ellipse cx="200" cy="180" rx="145" ry="65" fill="#e2e8f0" filter="url(#shadow)"/>
+  <ellipse cx="200" cy="175" rx="135" ry="55" fill="#f8fafc"/>
+  
+  <!-- Aloo Paratha -->
+  <ellipse cx="180" cy="175" rx="90" ry="45" fill="url(#parathaDough)" filter="url(#shadow)"/>
+  
+  <!-- Brown Roasted Tawa Marks -->
+  <ellipse cx="140" cy="165" rx="8" ry="4" fill="#a16207" opacity="0.7"/>
+  <ellipse cx="190" cy="160" rx="12" ry="5" fill="#a16207" opacity="0.6"/>
+  <ellipse cx="210" cy="180" rx="10" ry="4" fill="#a16207" opacity="0.7"/>
+  <ellipse cx="160" cy="185" rx="7" ry="3" fill="#a16207" opacity="0.6"/>
+  
+  <!-- Melting White Butter Dollop (Makhan) -->
+  <path d="M180,160 Q190,150 195,160 Q190,170 180,165 Z" fill="#ffffff" stroke="#fef9c3" stroke-width="2"/>
+  
+  <!-- Curd Bowl (Dahi) -->
+  <ellipse cx="280" cy="155" rx="30" ry="20" fill="#cbd5e1" filter="url(#shadow)"/>
+  <ellipse cx="280" cy="150" rx="25" ry="15" fill="#ffffff"/>
+  <!-- Cumin sprinkle -->
+  <circle cx="278" cy="148" r="1.5" fill="#78350f"/>
+  <circle cx="283" cy="152" r="1.5" fill="#78350f"/>
+  
+  <!-- Pickle dollop -->
+  <circle cx="285" cy="190" r="14" fill="#dc2626"/>
+  <circle cx="283" cy="188" r="10" fill="#ef4444"/>
+
+  <!-- Steam -->
+  <path d="M170,120 Q160,100 170,80" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+  <path d="M195,115 Q205,95 195,75" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+</svg>

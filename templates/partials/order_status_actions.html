@@ -1,0 +1,17 @@
+{% set transitions = {
+    'pending': [('confirmed', 'Accept Order', 'btn-success', 'fas fa-check'), ('cancelled', 'Cancel', 'btn-danger', 'fas fa-times')],
+    'confirmed': [('preparing', 'Start Preparing', 'btn-warning', 'fas fa-fire'), ('cancelled', 'Cancel', 'btn-danger', 'fas fa-times')],
+    'preparing': [('ready', 'Mark Ready', 'btn-info', 'fas fa-bell')],
+    'ready': [('completed', 'Complete Order', 'btn-primary', 'fas fa-check-double')]
+} %}
+{% set next_actions = transitions.get(order.status, []) %}
+<div class="status-actions-group">
+    {% for action, label, btn_class, icon_class in next_actions %}
+    <form method="POST" action="{{ url_for('staff.update_status', order_id=order.id) }}" class="inline-form confirm-form" data-confirm="Are you sure you want to mark Order #{{ order.id }} as {{ label }}?">
+        <input type="hidden" name="status" value="{{ action }}">
+        <button type="submit" class="btn btn-xs {{ btn_class }}">
+            <i class="{{ icon_class }}"></i> {{ label }}
+        </button>
+    </form>
+    {% endfor %}
+</div>

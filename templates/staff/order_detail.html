@@ -1,0 +1,119 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Order #{{ order.id }} Details — Staff{% endblock %}
+{% block page_title %}Order Management #{{ order.id }}{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'orders' %}
+
+<div class="order-detail-staff-grid">
+    <!-- Main Order Details Card -->
+    <div class="card">
+        <div class="detail-header">
+            <div>
+                <h2>Order #{{ order.id }}</h2>
+                <p class="text-muted"><i class="fas fa-clock"></i> Placed at {{ order.created_at.strftime('%A, %b %d, %Y (%I:%M %p)') if order.created_at else '' }}</p>
+            </div>
+            <div class="detail-header-status">
+                <span class="status-badge status-{{ order.status }} status-badge-lg">{{ order.status|title }}</span>
+            </div>
+        </div>
+
+        <!-- Customer Profile Summary -->
+        <div class="customer-info-box card-subtle">
+            <div class="section-title-row">
+                <i class="fas fa-user"></i>
+                <h3>Customer Information</h3>
+            </div>
+            <div class="customer-grid">
+                <div>
+                    <span class="text-muted">Student Name:</span>
+                    <strong>{{ order.user.name }}</strong>
+                </div>
+                <div>
+                    <span class="text-muted">Student ID:</span>
+                    <strong>{{ order.user.student_id or '—' }}</strong>
+                </div>
+                <div>
+                    <span class="text-muted">Phone Number:</span>
+                    <strong>{{ order.user.phone or 'Not provided' }}</strong>
+                </div>
+                <div>
+                    <span class="text-muted">Email:</span>
+                    <strong>{{ order.user.email }}</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Items Ordered -->
+        <div class="table-responsive mt-3">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Food Item</th>
+                        <th>Category</th>
+                        <th>Unit Price</th>
+                        <th>Qty</th>
+                        <th class="text-right">Line Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items %}
+                    <tr>
+                        <td><strong>{{ item.menu_item.name }}</strong></td>
+                        <td><span class="badge badge-subtle">{{ item.menu_item.category.name if item.menu_item.category else '—' }}</span></td>
+                        <td>Rs. {{ '%.0f'|format(item.price) }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td class="text-right"><strong class="price-text">Rs. {{ '%.0f'|format(item.price * item.quantity) }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="grand-total-row">
+                        <td colspan="4" class="text-right"><strong>Order Total:</strong></td>
+                        <td class="text-right"><strong class="total-amount">Rs. {{ '%.0f'|format(order.total_amount) }}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Meta info -->
+        <div class="order-meta-footer mt-3">
+            <div>
+                <span class="text-muted">Pickup Time:</span>
+                <strong>{{ order.pickup_time }}</strong>
+            </div>
+            <div>
+                <span class="text-muted">Payment:</span>
+                <strong>{{ order.payment_method|title }} (Status: {{ order.payment_status|title }})</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workflow Sidebar Card -->
+    <aside class="card staff-action-panel">
+        <h3>Kitchen Status Action</h3>
+        <p class="text-muted">Advance or update order workflow status:</p>
+
+        <div class="staff-action-box">
+            {% include 'partials/order_status_actions.html' %}
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ url_for('staff.orders') }}" class="btn btn-outline btn-block">
+                <i class="fas fa-arrow-left"></i> Back to Orders List
+            </a>
+            <a href="{{ url_for('staff.dashboard') }}" class="btn btn-outline btn-block mt-2">
+                <i class="fas fa-home"></i> Staff Dashboard
+            </a>
+        </div>
+    </aside>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    ConfirmActions.init();
+});
+</script>
+{% endblock %}

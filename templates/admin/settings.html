@@ -1,0 +1,55 @@
+{% extends "dashboard_base.html" %}
+{% block title %}System Settings — Admin Console{% endblock %}
+{% block page_title %}System & Canteen Settings{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'settings' %}
+
+<div class="settings-layout">
+    <div class="card">
+        <div class="section-title-row">
+            <i class="fas fa-server"></i>
+            <h2>System Environment & Database</h2>
+        </div>
+        <p class="text-muted">Current deployment configurations and operational parameters</p>
+
+        <div class="settings-list">
+            <div class="settings-row">
+                <div>
+                    <strong>Application Name</strong>
+                    <p class="text-muted">College Canteen Management System</p>
+                </div>
+                <span class="badge badge-success">Version 1.0.0</span>
+            </div>
+            <div class="settings-row">
+                <div>
+                    <strong>Relational Database Engine</strong>
+                    <p class="text-muted">PostgreSQL 17 (`canteen_management`) with psycopg driver</p>
+                </div>
+                <span class="badge badge-subtle">Normalized 3NF</span>
+            </div>
+            <div class="settings-row">
+                <div>
+                    <strong>Currency & Locale</strong>
+                    <p class="text-muted">Nepalese Rupee (NPR - Rs.)</p>
+                </div>
+                <span class="badge badge-subtle">NPR (Rs.)</span>
+            </div>
+            <div class="settings-row">
+                <div>
+                    <strong>Payment Gateway Mode</strong>
+                    <p class="text-muted">Simulated Sandbox for eSewa, Khalti, QR, and Cash</p>
+                </div>
+                <span class="badge badge-warning">Simulated Demo</span>
+            </div>
+            <div class="settings-row">
+                <div>
+                    <strong>Session Security</strong>
+                    <p class="text-muted">HTTPOnly, SameSite=Lax, SHA-256 password hashing</p>
+                </div>
+                <span class="badge badge-success"><i class="fas fa-shield-alt"></i> Protected</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

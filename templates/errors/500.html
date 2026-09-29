@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}500 — Server Error | Campus Canteen{% endblock %}
+{% block navbar %}{% include "partials/public_nav.html" %}{% endblock %}
+
+{% block content %}
+<div class="error-page container">
+    <div class="error-card card">
+        <div class="error-icon">⚠️</div>
+        <h1>500</h1>
+        <h2>Kitchen Glitch! Something Went Wrong</h2>
+        <p class="text-muted">An unexpected server error occurred while processing your request. Please try again or return to the homepage.</p>
+        <div class="error-actions">
+            <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-home"></i> Go to Homepage
+            </a>
+            <a href="javascript:location.reload()" class="btn btn-outline btn-lg">
+                <i class="fas fa-sync-alt"></i> Refresh Page
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}{% include "partials/footer.html" %}{% endblock %}

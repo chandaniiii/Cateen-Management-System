@@ -1,0 +1,63 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Staff Directory — Admin Console{% endblock %}
+{% block page_title %}Staff Members & Administrators{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'staff' %}
+
+<div class="page-header-row">
+    <div>
+        <h2>Canteen Staff Directory ({{ staff_list|length }} Members)</h2>
+        <p class="text-muted">Staff and administrators with elevated operational privileges in the canteen system</p>
+    </div>
+    <div class="header-actions">
+        <a href="{{ url_for('admin.users') }}" class="btn btn-outline">
+            <i class="fas fa-user-plus"></i> Promote User to Staff
+        </a>
+    </div>
+</div>
+
+<div class="table-responsive card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Member Name</th>
+                <th>Email Address</th>
+                <th>Contact Phone</th>
+                <th>System Role</th>
+                <th>Account Status</th>
+                <th>Member Since</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in staff_list %}
+            <tr>
+                <td>
+                    <div class="user-cell">
+                        <span class="avatar-circle-sm">{{ member.name[0]|upper }}</span>
+                        <strong>{{ member.name }}</strong>
+                    </div>
+                </td>
+                <td>{{ member.email }}</td>
+                <td>{{ member.phone or '—' }}</td>
+                <td><span class="user-role-tag role-{{ member.role }}">{{ member.role|title }}</span></td>
+                <td>
+                    <span class="badge {% if member.status == 'active' %}badge-success{% else %}badge-danger{% endif %}">
+                        {{ member.status|title }}
+                    </span>
+                </td>
+                <td>{{ member.created_at.strftime('%b %d, %Y') if member.created_at else '' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card mt-3">
+    <div class="section-title-row">
+        <i class="fas fa-info-circle"></i>
+        <h3>Staff Management Guidance</h3>
+    </div>
+    <p class="text-muted">To appoint new staff members or administrators, navigate to <a href="{{ url_for('admin.users') }}" class="link">User Accounts</a> and change their role from <code>Student</code> to <code>Staff</code> or <code>Admin</code>.</p>
+</div>
+{% endblock %}

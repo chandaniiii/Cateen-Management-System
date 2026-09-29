@@ -1,0 +1,102 @@
+{% set current_role = session_user.role if session_user else 'student' %}
+<aside class="sidebar {% if current_role == 'admin' %}sidebar-admin{% elif current_role == 'staff' %}sidebar-staff{% endif %}" id="sidebar">
+    <div class="sidebar-header">
+        <a href="{% if current_role == 'admin' %}{{ url_for('admin.dashboard') }}{% elif current_role == 'staff' %}{{ url_for('staff.dashboard') }}{% else %}{{ url_for('student.dashboard') }}{% endif %}" class="brand">
+            <span>{% if current_role == 'admin' %}⚙️{% elif current_role == 'staff' %}👨‍🍳{% else %}🍽️{% endif %}</span>
+            <span>{% if current_role == 'admin' %}Admin Portal{% elif current_role == 'staff' %}Staff Portal{% else %}Canteen{% endif %}</span>
+        </a>
+        <button class="sidebar-close" aria-label="Close sidebar"><i class="fas fa-times"></i></button>
+    </div>
+
+    <nav class="sidebar-nav">
+        {% block sidebar_links %}
+            {% if current_role == 'admin' %}
+                <a href="{{ url_for('admin.dashboard') }}" class="sidebar-link {% if active_page == 'dashboard' or active == 'dashboard' %}active{% endif %}">
+                    <i class="fas fa-chart-line"></i> <span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('admin.orders') }}" class="sidebar-link {% if active_page == 'orders' or active == 'orders' %}active{% endif %}">
+                    <i class="fas fa-receipt"></i> <span>Orders</span>
+                </a>
+                <a href="{{ url_for('admin.menu') }}" class="sidebar-link {% if active_page == 'menu' or active == 'menu' %}active{% endif %}">
+                    <i class="fas fa-utensils"></i> <span>Menu Items</span>
+                </a>
+                <a href="{{ url_for('admin.categories') }}" class="sidebar-link {% if active_page == 'categories' or active == 'categories' %}active{% endif %}">
+                    <i class="fas fa-tags"></i> <span>Categories</span>
+                </a>
+                <a href="{{ url_for('admin.inventory') }}" class="sidebar-link {% if active_page == 'inventory' or active == 'inventory' %}active{% endif %}">
+                    <i class="fas fa-boxes"></i> <span>Inventory</span>
+                </a>
+                <a href="{{ url_for('admin.users') }}" class="sidebar-link {% if active_page == 'users' or active == 'users' %}active{% endif %}">
+                    <i class="fas fa-users"></i> <span>User Accounts</span>
+                </a>
+                <a href="{{ url_for('admin.staff') }}" class="sidebar-link {% if active_page == 'staff' or active == 'staff' %}active{% endif %}">
+                    <i class="fas fa-user-tie"></i> <span>Staff Members</span>
+                </a>
+                <a href="{{ url_for('admin.reviews') }}" class="sidebar-link {% if active_page == 'reviews' or active == 'reviews' %}active{% endif %}">
+                    <i class="fas fa-star"></i> <span>Reviews</span>
+                </a>
+                <a href="{{ url_for('admin.reports') }}" class="sidebar-link {% if active_page == 'reports' or active == 'reports' %}active{% endif %}">
+                    <i class="fas fa-chart-pie"></i> <span>Reports</span>
+                </a>
+                <a href="{{ url_for('admin.settings') }}" class="sidebar-link {% if active_page == 'settings' or active == 'settings' %}active{% endif %}">
+                    <i class="fas fa-cog"></i> <span>Settings</span>
+                </a>
+            {% elif current_role == 'staff' %}
+                <a href="{{ url_for('staff.dashboard') }}" class="sidebar-link {% if active_page == 'dashboard' or active == 'dashboard' %}active{% endif %}">
+                    <i class="fas fa-home"></i> <span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('staff.orders', status='new') }}" class="sidebar-link {% if (active_page == 'orders' or active == 'orders') and (current_status == 'new' or request.args.get('status') == 'new') %}active{% endif %}">
+                    <i class="fas fa-bell"></i> <span>New Orders</span>
+                </a>
+                <a href="{{ url_for('staff.orders', status='preparing') }}" class="sidebar-link {% if (active_page == 'orders' or active == 'orders') and (current_status == 'preparing' or request.args.get('status') == 'preparing') %}active{% endif %}">
+                    <i class="fas fa-fire"></i> <span>Preparing</span>
+                </a>
+                <a href="{{ url_for('staff.orders', status='ready') }}" class="sidebar-link {% if (active_page == 'orders' or active == 'orders') and (current_status == 'ready' or request.args.get('status') == 'ready') %}active{% endif %}">
+                    <i class="fas fa-check-circle"></i> <span>Ready</span>
+                </a>
+                <a href="{{ url_for('staff.orders', status='completed') }}" class="sidebar-link {% if (active_page == 'orders' or active == 'orders') and (current_status == 'completed' or request.args.get('status') == 'completed') %}active{% endif %}">
+                    <i class="fas fa-clipboard-check"></i> <span>Completed</span>
+                </a>
+                <a href="{{ url_for('staff.orders', status='all') }}" class="sidebar-link {% if (active_page == 'orders' or active == 'orders') and (current_status == 'all' or request.args.get('status') == 'all') %}active{% endif %}">
+                    <i class="fas fa-list"></i> <span>All Orders</span>
+                </a>
+            {% else %}
+                <a href="{{ url_for('student.dashboard') }}" class="sidebar-link {% if active_page == 'dashboard' or active == 'dashboard' %}active{% endif %}">
+                    <i class="fas fa-home"></i> <span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('student.menu') }}" class="sidebar-link {% if active_page == 'menu' or active == 'menu' %}active{% endif %}">
+                    <i class="fas fa-utensils"></i> <span>Browse Menu</span>
+                </a>
+                <a href="{{ url_for('student.cart') }}" class="sidebar-link {% if active_page == 'cart' or active == 'cart' %}active{% endif %}">
+                    <i class="fas fa-shopping-cart"></i> <span>Cart</span>
+                    <span class="badge-count cart-badge {% if not cart_count %}hidden{% endif %}">{{ cart_count or 0 }}</span>
+                </a>
+                <a href="{{ url_for('student.orders') }}" class="sidebar-link {% if active_page == 'orders' or active == 'orders' %}active{% endif %}">
+                    <i class="fas fa-receipt"></i> <span>Active Orders</span>
+                </a>
+                <a href="{{ url_for('student.order_history') }}" class="sidebar-link {% if active_page == 'history' or active == 'history' %}active{% endif %}">
+                    <i class="fas fa-history"></i> <span>Order History</span>
+                </a>
+                <a href="{{ url_for('student.profile') }}" class="sidebar-link {% if active_page == 'profile' or active == 'profile' %}active{% endif %}">
+                    <i class="fas fa-user"></i> <span>My Profile</span>
+                </a>
+            {% endif %}
+        {% endblock %}
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="user-pill">
+            <div class="user-pill-avatar">{{ session_user.name[0]|upper if session_user else 'U' }}</div>
+            <div class="user-pill-info">
+                <strong class="user-pill-name">{{ session_user.name if session_user else 'Guest' }}</strong>
+                <small class="user-pill-role">{{ session_user.role|title if session_user else 'Student' }}</small>
+            </div>
+        </div>
+        <form action="{{ url_for('auth.logout') }}" method="POST" class="logout-form">
+            <button type="submit" class="sidebar-link logout-btn" title="Logout">
+                <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+            </button>
+        </form>
+    </div>
+</aside>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>

@@ -1,0 +1,187 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Checkout — Campus Canteen{% endblock %}
+{% block page_title %}Checkout & Payment{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'cart' %}
+
+<form method="POST" action="{{ url_for('student.checkout') }}" class="checkout-layout">
+    <div class="checkout-main">
+        <!-- Customer Info -->
+        <section class="card">
+            <div class="section-title-row">
+                <i class="fas fa-user-circle"></i>
+                <h2>Customer Information</h2>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" value="{{ session_user.name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="student_id">Student ID</label>
+                    <input type="text" id="student_id" name="student_id" value="{{ session_user.student_id or '' }}" placeholder="e.g. STU2024001">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number (For Order Ready SMS/Call)</label>
+                <input type="tel" id="phone" name="phone" value="{{ session_user.phone or '' }}" placeholder="e.g. 9841234567" required>
+            </div>
+        </section>
+
+        <!-- Pickup Time -->
+        <section class="card">
+            <div class="section-title-row">
+                <i class="fas fa-clock"></i>
+                <h2>Pickup Schedule</h2>
+            </div>
+            <p class="text-muted">Select when you want to collect your meal from the canteen counter:</p>
+            <div class="radio-group">
+                <label class="radio-card">
+                    <input type="radio" name="pickup_time" value="ASAP" checked>
+                    <div class="radio-content">
+                        <i class="fas fa-bolt"></i>
+                        <strong>ASAP</strong>
+                        <small>Ready in ~15 min</small>
+                    </div>
+                </label>
+                <label class="radio-card">
+                    <input type="radio" name="pickup_time" value="12:00 PM">
+                    <div class="radio-content">
+                        <i class="fas fa-sun"></i>
+                        <strong>12:00 PM</strong>
+                        <small>Lunch Break</small>
+                    </div>
+                </label>
+                <label class="radio-card">
+                    <input type="radio" name="pickup_time" value="1:00 PM">
+                    <div class="radio-content">
+                        <i class="fas fa-utensils"></i>
+                        <strong>1:00 PM</strong>
+                        <small>Afternoon</small>
+                    </div>
+                </label>
+                <label class="radio-card">
+                    <input type="radio" name="pickup_time" value="5:00 PM">
+                    <div class="radio-content">
+                        <i class="fas fa-coffee"></i>
+                        <strong>5:00 PM</strong>
+                        <small>Evening Snack</small>
+                    </div>
+                </label>
+            </div>
+        </section>
+
+        <!-- Payment Method -->
+        <section class="card">
+            <div class="section-title-row">
+                <i class="fas fa-credit-card"></i>
+                <h2>Payment Method</h2>
+                <span class="badge badge-warning">Simulated Demo Flow</span>
+            </div>
+            <div class="payment-options">
+                <label class="payment-option">
+                    <input type="radio" name="payment_method" value="cash" checked>
+                    <div class="payment-card-inner">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <strong>Cash on Pickup</strong>
+                        <small>Pay at counter</small>
+                    </div>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="payment_method" value="esewa">
+                    <div class="payment-card-inner">
+                        <i class="fas fa-wallet" style="color: #60bb46;"></i>
+                        <strong>eSewa</strong>
+                        <small>Simulated Wallet</small>
+                    </div>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="payment_method" value="khalti">
+                    <div class="payment-card-inner">
+                        <i class="fas fa-mobile-alt" style="color: #5c2d91;"></i>
+                        <strong>Khalti</strong>
+                        <small>Simulated Wallet</small>
+                    </div>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="payment_method" value="qr">
+                    <div class="payment-card-inner">
+                        <i class="fas fa-qrcode" style="color: #0284c7;"></i>
+                        <strong>Fonepay / QR</strong>
+                        <small>Simulated Scan</small>
+                    </div>
+                </label>
+            </div>
+
+            <!-- Simulated Payment Info Box -->
+            <div class="simulated-payment-box" id="simulatedPaymentBox">
+                <div class="payment-badge-pill">
+                    <i class="fas fa-info-circle"></i>
+                    <span id="paymentMethodNote">Cash on Pickup selected: Pay Rs. {{ '%.0f'|format(total) }} directly at the canteen counter upon collection.</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Order Summary Sidebar -->
+    <aside class="checkout-summary card">
+        <h2>Order Items</h2>
+        <div class="summary-items-list">
+            {% for entry in items %}
+            <div class="summary-item">
+                <div class="summary-item-title">
+                    <strong>{{ entry.item.name }}</strong>
+                    <small>Qty: {{ entry.quantity }} × Rs. {{ '%.0f'|format(entry.item.price) }}</small>
+                </div>
+                <span class="summary-item-price">Rs. {{ '%.0f'|format(entry.line_total) }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-row">
+            <span>Subtotal</span>
+            <span>Rs. {{ '%.0f'|format(subtotal) }}</span>
+        </div>
+        <div class="summary-row">
+            <span>Canteen Service Fee</span>
+            <span class="text-success">Rs. 0</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-row total">
+            <span>Total Payable</span>
+            <span class="total-amount">Rs. {{ '%.0f'|format(total) }}</span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="placeOrderBtn">
+            <i class="fas fa-check-circle"></i> Place Order Now
+        </button>
+        <a href="{{ url_for('student.cart') }}" class="btn btn-outline btn-block">
+            <i class="fas fa-arrow-left"></i> Return to Cart
+        </a>
+    </aside>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
+    const noteEl = document.getElementById('paymentMethodNote');
+    const totalAmount = "{{ '%.0f'|format(total) }}";
+
+    paymentRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.value === 'cash') {
+                noteEl.textContent = `Cash on Pickup selected: Pay Rs. ${totalAmount} directly at the canteen counter upon collection.`;
+            } else if (radio.value === 'esewa') {
+                noteEl.textContent = `eSewa (Demo Mode): Order will be instantly verified with a simulated eSewa payment of Rs. ${totalAmount}.`;
+            } else if (radio.value === 'khalti') {
+                noteEl.textContent = `Khalti (Demo Mode): Order will be instantly verified with a simulated Khalti digital wallet payment of Rs. ${totalAmount}.`;
+            } else if (radio.value === 'qr') {
+                noteEl.textContent = `Fonepay / QR (Demo Mode): Order will be instantly verified with a simulated QR scan payment of Rs. ${totalAmount}.`;
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

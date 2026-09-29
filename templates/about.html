@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}About Us — Campus Canteen Management System{% endblock %}
+{% block navbar %}{% include "partials/public_nav.html" %}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <span class="badge"><i class="fas fa-heart"></i> Fresh · Fast · Affordable</span>
+        <h1>About Campus Canteen</h1>
+        <p>Serving our university students, faculty, and staff with delicious, hygienic meals every single day.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container narrow">
+        <div class="about-card card">
+            <h2>Our Story & Mission</h2>
+            <p>The Campus Canteen is the vibrant culinary heart of our university. Long queues during short class breaks often meant students skipped meals or arrived late to lectures. Our digital Canteen Management System was built to solve this exact challenge.</p>
+            <p>Students can now view real-time menu availability, customize their orders, select pickup times, pay digitally or with cash, and pick up fresh piping hot food without waiting in queues.</p>
+
+            <div class="about-features-grid mt-4">
+                <div class="about-feature-box">
+                    <i class="fas fa-leaf"></i>
+                    <h4>Fresh Ingredients</h4>
+                    <p>Locally sourced vegetables, fresh meat, and quality spices prepared under strict hygiene standards.</p>
+                </div>
+                <div class="about-feature-box">
+                    <i class="fas fa-tag"></i>
+                    <h4>Student-Friendly Pricing</h4>
+                    <p>Transparent pricing in NPR crafted to fit student budgets without compromising quality.</p>
+                </div>
+                <div class="about-feature-box">
+                    <i class="fas fa-bolt"></i>
+                    <h4>Lightning Fast Prep</h4>
+                    <p>Live kitchen pipeline tracking ensures orders are ready in 15–20 minutes flat.</p>
+                </div>
+                <div class="about-feature-box">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h4>Modern Digital Experience</h4>
+                    <p>Seamless ordering across laptop, tablet, and mobile smartphones.</p>
+                </div>
+            </div>
+
+            <div class="canteen-schedule-box mt-4">
+                <h3><i class="fas fa-clock"></i> Daily Operational Schedule</h3>
+                <ul class="schedule-list">
+                    <li><span>Breakfast Service:</span> <strong>7:00 AM – 11:00 AM</strong></li>
+                    <li><span>Lunch & Main Courses:</span> <strong>11:00 AM – 3:30 PM</strong></li>
+                    <li><span>Evening Snacks & Beverages:</span> <strong>3:30 PM – 8:00 PM</strong></li>
+                </ul>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-utensils"></i> Explore Menu & Order
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block footer %}{% include "partials/footer.html" %}{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Admin Dashboard — Campus Canteen Console{% endblock %}
+{% block page_title %}Administrator Dashboard{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'dashboard' %}
+
+<div class="welcome-banner card">
+    <div class="welcome-text">
+        <h1>Campus Canteen Administration ⚙️</h1>
+        <p>Real-time analytics, order tracking, menu management, and inventory overview.</p>
+    </div>
+    <div class="welcome-action">
+        <a href="{{ url_for('admin.add_menu_item') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Food
+        </a>
+    </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon-wrapper stat-icon-users"><i class="fas fa-users"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Registered Students</span>
+            <span class="stat-value">{{ total_users }}</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon-wrapper stat-icon-orders"><i class="fas fa-shopping-bag"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Today's Orders</span>
+            <span class="stat-value">{{ today_orders }}</span>
+        </div>
+    </div>
+    <div class="stat-card stat-revenue">
+        <div class="stat-icon-wrapper stat-icon-rev"><i class="fas fa-money-bill-wave"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Today's Revenue</span>
+            <span class="stat-value price-text">Rs. {{ '%.0f'|format(revenue_today) }}</span>
+        </div>
+    </div>
+    <div class="stat-card stat-success">
+        <div class="stat-icon-wrapper stat-icon-food"><i class="fas fa-utensils"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Available Dishes</span>
+            <span class="stat-value">{{ available_items }}</span>
+        </div>
+    </div>
+    <div class="stat-card {% if low_stock > 0 %}stat-warning{% endif %}">
+        <div class="stat-icon-wrapper stat-icon-inventory"><i class="fas fa-boxes"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Low Stock Items</span>
+            <span class="stat-value">{{ low_stock }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Interactive Analytics Charts Grid -->
+<div class="charts-grid">
+    <div class="card chart-card">
+        <div class="chart-header">
+            <h3><i class="fas fa-chart-line"></i> Daily Sales (Past 7 Days)</h3>
+            <span class="badge badge-subtle">Revenue in NPR</span>
+        </div>
+        <canvas id="dailySalesChart"></canvas>
+    </div>
+    <div class="card chart-card">
+        <div class="chart-header">
+            <h3><i class="fas fa-chart-bar"></i> Weekly Order Volume</h3>
+            <span class="badge badge-subtle">Order Counts</span>
+        </div>
+        <canvas id="weeklyOrdersChart"></canvas>
+    </div>
+    <div class="card chart-card">
+        <div class="chart-header">
+            <h3><i class="fas fa-chart-pie"></i> Popular Food Items</h3>
+            <span class="badge badge-subtle">By Quantity</span>
+        </div>
+        <canvas id="popularFoodsChart"></canvas>
+    </div>
+    <div class="card chart-card">
+        <div class="chart-header">
+            <h3><i class="fas fa-layer-group"></i> Revenue by Category</h3>
+            <span class="badge badge-subtle">Category Distribution</span>
+        </div>
+        <canvas id="categoryRevenueChart"></canvas>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    AdminCharts.init('{{ url_for("admin.api_reports") }}');
+});
+</script>
+{% endblock %}

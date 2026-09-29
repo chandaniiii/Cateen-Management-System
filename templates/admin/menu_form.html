@@ -1,0 +1,82 @@
+{% extends "dashboard_base.html" %}
+{% block title %}{% if item %}Edit {{ item.name }}{% else %}Add New Menu Item{% endif %} — Admin{% endblock %}
+{% block page_title %}{% if item %}Edit Food Item{% else %}Add Food Item{% endif %}{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'menu' %}
+
+<div class="form-page-container">
+    <div class="card form-card">
+        <div class="card-header">
+            <h2>{% if item %}Edit '{{ item.name }}'{% else %}Add New Food Dish{% endif %}</h2>
+            <a href="{{ url_for('admin.menu') }}" class="btn btn-sm btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Menu
+            </a>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="admin-form">
+            <div class="form-row">
+                <div class="form-group flex-2">
+                    <label for="name"><i class="fas fa-utensils"></i> Food Item Name *</label>
+                    <input type="text" id="name" name="name" value="{{ item.name if item else '' }}" required placeholder="e.g. Steam Momo (Buff/Veg)">
+                </div>
+                <div class="form-group flex-1">
+                    <label for="category_id"><i class="fas fa-tags"></i> Category *</label>
+                    <select id="category_id" name="category_id" required>
+                        <option value="">Select Category</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}" {% if item and item.category_id == cat.id %}selected{% endif %}>
+                            {{ cat.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description"><i class="fas fa-align-left"></i> Description</label>
+                <textarea id="description" name="description" rows="3" placeholder="Brief description of dish, preparation, ingredients...">{{ item.description if item else '' }}</textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="price"><i class="fas fa-coins"></i> Price (in NPR Rs.) *</label>
+                    <input type="number" id="price" name="price" step="1" min="1" value="{{ '%.0f'|format(item.price) if item else '' }}" required placeholder="e.g. 120">
+                </div>
+                <div class="form-group">
+                    <label for="stock"><i class="fas fa-boxes"></i> Initial / Current Stock *</label>
+                    <input type="number" id="stock" name="stock" min="0" value="{{ item.stock if item else 50 }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="minimum_stock"><i class="fas fa-exclamation-circle"></i> Low Stock Threshold *</label>
+                    <input type="number" id="minimum_stock" name="minimum_stock" min="1" value="{{ item.minimum_stock if item else 10 }}" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group flex-2">
+                    <label for="image"><i class="fas fa-image"></i> Food Image (Upload image or leave empty for default)</label>
+                    <input type="file" id="image" name="image" accept="image/*,.svg">
+                    {% if item and item.image %}
+                    <small class="text-muted d-block mt-1">Current image: <a href="{{ item.image }}" target="_blank">{{ item.image }}</a></small>
+                    {% endif %}
+                </div>
+                <div class="form-group flex-1 checkbox-group-box">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="is_available" id="is_available" {% if not item or item.is_available %}checked{% endif %}>
+                        <span><i class="fas fa-check-circle"></i> Available for Order</span>
+                    </label>
+                    <small class="text-muted">Uncheck to temporarily hide item from menu without deleting.</small>
+                </div>
+            </div>
+
+            <div class="form-actions-row">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-save"></i> Save Food Item
+                </button>
+                <a href="{{ url_for('admin.menu') }}" class="btn btn-outline btn-lg">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

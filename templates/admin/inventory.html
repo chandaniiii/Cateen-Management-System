@@ -1,0 +1,76 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Inventory & Stock Control — Admin Console{% endblock %}
+{% block page_title %}Canteen Inventory Management{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'inventory' %}
+
+<div class="page-header-row">
+    <div>
+        <h2>Inventory & Stock Levels ({{ items|length }} Items)</h2>
+        <p class="text-muted">Real-time stock tracking with low-stock warnings and one-click stock restock updates</p>
+    </div>
+</div>
+
+<div class="table-responsive card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Food Item</th>
+                <th>Category</th>
+                <th>Current Stock</th>
+                <th>Min. Threshold</th>
+                <th>Inventory Status</th>
+                <th>Update Stock & Availability</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr class="{% if item.stock <= 0 %}row-out-of-stock{% elif item.stock <= item.minimum_stock %}row-low-stock{% endif %}">
+                <td>
+                    <div class="user-cell">
+                        <strong>{{ item.name }}</strong>
+                        <small class="text-muted">Price: Rs. {{ '%.0f'|format(item.price) }}</small>
+                    </div>
+                </td>
+                <td><span class="badge badge-subtle">{{ item.category.name }}</span></td>
+                <td>
+                    <strong class="{% if item.stock <= 0 %}text-danger{% elif item.stock <= item.minimum_stock %}text-warning{% else %}text-success{% endif %}">
+                        {{ item.stock }} units
+                    </strong>
+                </td>
+                <td>{{ item.minimum_stock }} units</td>
+                <td>
+                    {% if item.stock_status == 'out_of_stock' %}
+                        <span class="availability out"><i class="fas fa-times-circle"></i> Out of Stock</span>
+                    {% elif item.stock_status == 'low_stock' %}
+                        <span class="availability low"><i class="fas fa-exclamation-triangle"></i> Low Stock</span>
+                    {% else %}
+                        <span class="availability in"><i class="fas fa-check-circle"></i> In Stock</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin.update_inventory', item_id=item.id) }}" class="inventory-update-form">
+                        <div class="input-with-label">
+                            <label><small>Stock:</small></label>
+                            <input type="number" name="stock" value="{{ item.stock }}" min="0" class="input-sm" title="Current stock count">
+                        </div>
+                        <div class="input-with-label">
+                            <label><small>Min:</small></label>
+                            <input type="number" name="minimum_stock" value="{{ item.minimum_stock }}" min="1" class="input-sm" title="Minimum alert threshold">
+                        </div>
+                        <label class="checkbox-inline" title="Item enabled for ordering">
+                            <input type="checkbox" name="is_available" {% if item.is_available %}checked{% endif %}>
+                            <span>Active</span>
+                        </label>
+                        <button type="submit" class="btn btn-xs btn-primary">
+                            <i class="fas fa-save"></i> Update
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

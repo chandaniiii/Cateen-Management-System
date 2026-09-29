@@ -1,0 +1,152 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Student Dashboard — Campus Canteen{% endblock %}
+{% block page_title %}Student Dashboard{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'dashboard' %}
+
+<div class="welcome-banner card">
+    <div class="welcome-text">
+        <h1>Good day, {{ session_user.name.split()[0] }} 👋</h1>
+        <p>Ready to grab something delicious from the campus canteen?</p>
+    </div>
+    <div class="welcome-action">
+        <a href="{{ url_for('student.menu') }}" class="btn btn-primary">
+            <i class="fas fa-utensils"></i> Browse Menu
+        </a>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon-wrapper stat-icon-orders"><i class="fas fa-receipt"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Total Orders</span>
+            <span class="stat-value">{{ total_orders }}</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon-wrapper stat-icon-cart"><i class="fas fa-shopping-cart"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Cart Items</span>
+            <span class="stat-value cart-badge">{{ cart_count or 0 }}</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon-wrapper stat-icon-fav"><i class="fas fa-heart"></i></div>
+        <div class="stat-info">
+            <span class="stat-label">Most Ordered</span>
+            <span class="stat-value stat-text">{{ favorite.name if favorite else 'None yet' }}</span>
+        </div>
+    </div>
+</div>
+
+{% if active_order %}
+<div class="card active-order-card">
+    <div class="card-header">
+        <div class="active-order-title">
+            <span class="pulse-indicator"></span>
+            <h2>Active Order #{{ active_order.id }}</h2>
+        </div>
+        <span class="status-badge status-{{ active_order.status }}">{{ active_order.status|title }}</span>
+    </div>
+    <div class="active-order-body">
+        <div class="active-order-info">
+            <p><strong>Total:</strong> Rs. {{ '%.0f'|format(active_order.total_amount) }} · <strong>Pickup:</strong> {{ active_order.pickup_time }} · <strong>Payment:</strong> {{ active_order.payment_method|title }}</p>
+            <p class="text-muted">Placed {{ active_order.created_at.strftime('%I:%M %p') if active_order.created_at else '' }}</p>
+        </div>
+        <div class="active-order-actions">
+            <a href="{{ url_for('student.track_order', order_id=active_order.id) }}" class="btn btn-primary">
+                <i class="fas fa-map-marker-alt"></i> Live Track Order
+            </a>
+            <a href="{{ url_for('student.order_detail', order_id=active_order.id) }}" class="btn btn-outline">
+                View Details
+            </a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<section class="section-inline">
+    <div class="section-header-row">
+        <div>
+            <h2>Popular Picks</h2>
+            <p class="text-muted">Frequently ordered items by students</p>
+        </div>
+        <a href="{{ url_for('student.menu') }}" class="link">View full menu →</a>
+    </div>
+    <div class="food-grid compact">
+        {% for item in popular %}
+        <article class="food-card">
+            <div class="food-card-image">
+                <img src="{{ item.image or url_for('static', filename='images/food-placeholder.svg') }}" alt="{{ item.name }}" loading="lazy">
+                <span class="food-badge">{{ item.category.name }}</span>
+            </div>
+            <div class="food-card-body">
+                <h3>{{ item.name }}</h3>
+                <div class="food-card-footer">
+                    <span class="price">Rs. {{ '%.0f'|format(item.price) }}</span>
+                    <div class="card-btn-group">
+                        <a href="{{ url_for('student.food_detail', item_id=item.id) }}" class="btn btn-xs btn-outline" title="Details">
+                            Details
+                        </a>
+                        <button type="button" class="btn btn-xs btn-primary menu-add-cart" data-id="{{ item.id }}" title="Quick Add">
+                            + Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+{% if recent_orders %}
+<section class="section-inline">
+    <div class="section-header-row">
+        <h2>Recent Orders</h2>
+        <a href="{{ url_for('student.order_history') }}" class="link">View history →</a>
+    </div>
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Order</th>
+                    <th>Date & Time</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in recent_orders %}
+                <tr>
+                    <td><strong>#{{ order.id }}</strong></td>
+                    <td>{{ order.created_at.strftime('%b %d, %Y (%I:%M %p)') if order.created_at else '' }}</td>
+                    <td>{{ order.items|length }} item(s)</td>
+                    <td><strong class="price-text">Rs. {{ '%.0f'|format(order.total_amount) }}</strong></td>
+                    <td><span class="status-badge status-{{ order.status }}">{{ order.status|title }}</span></td>
+                    <td>
+                        <a href="{{ url_for('student.order_detail', order_id=order.id) }}" class="btn btn-xs btn-outline">
+                            Details
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.menu-add-cart').forEach(btn => {
+        btn.addEventListener('click', () => Cart.addItem(btn.dataset.id, 1));
+    });
+});
+</script>
+{% endblock %}

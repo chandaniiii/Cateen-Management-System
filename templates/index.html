@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% block title %}Campus Canteen — Order College Food Online{% endblock %}
+{% block navbar %}{% include "partials/public_nav.html" %}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container hero-grid">
+        <div class="hero-content">
+            <span class="badge"><i class="fas fa-bolt"></i> Fast & Fresh Campus Dining</span>
+            <h1 class="hero-title">Your Campus Canteen, Made Simple.</h1>
+            <p class="hero-subtitle">Order your favorite meals, skip the long queues, and enjoy a faster campus dining experience.</p>
+            <div class="hero-actions">
+                {% if session_user and session_user.role == 'student' %}
+                    <a href="{{ url_for('student.menu') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-utensils"></i> Browse Menu
+                    </a>
+                    <a href="{{ url_for('student.dashboard') }}" class="btn btn-outline btn-lg">
+                        <i class="fas fa-th-large"></i> My Dashboard
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-utensils"></i> Browse Menu & Order
+                    </a>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline btn-lg">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                {% endif %}
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat-item">
+                    <strong>15–20 min</strong>
+                    <span>Avg. Prep Time</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat-item">
+                    <strong>Rs. 30+</strong>
+                    <span>Affordable NPR Rates</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat-item">
+                    <strong>100%</strong>
+                    <span>Fresh & Hygienic</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-card hero-card-1">
+                <span class="hero-card-icon">🥟</span>
+                <div>
+                    <strong>Steam Momo</strong>
+                    <small>Rs. 120 · Hot & Spicy</small>
+                </div>
+            </div>
+            <div class="hero-card hero-card-2">
+                <span class="hero-card-icon">☕</span>
+                <div>
+                    <strong>Masala Chiya</strong>
+                    <small>Rs. 40 · Campus Special</small>
+                </div>
+            </div>
+            <div class="hero-card hero-card-3">
+                <span class="hero-card-icon">🍔</span>
+                <div>
+                    <strong>Chicken Burger</strong>
+                    <small>Rs. 150 · Loaded Cheese</small>
+                </div>
+            </div>
+            <div class="hero-circle"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Foods Section -->
+<section class="section" id="popular">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Chef's Favorites</span>
+            <h2>Popular Foods</h2>
+            <p>Student favorites made fresh daily in our campus kitchen</p>
+        </div>
+        <div class="food-grid">
+            {% for item in popular %}
+            <article class="food-card">
+                <div class="food-card-image">
+                    <img src="{{ item.image or url_for('static', filename='images/food-placeholder.svg') }}" alt="{{ item.name }}" loading="lazy">
+                    <span class="food-badge">{{ item.category.name }}</span>
+                </div>
+                <div class="food-card-body">
+                    <h3 class="food-card-title">{{ item.name }}</h3>
+                    <p class="food-card-desc">{{ item.description }}</p>
+                    <div class="food-card-footer">
+                        <span class="price">Rs. {{ '%.0f'|format(item.price) }}</span>
+                        {% if session_user and session_user.role == 'student' %}
+                            <a href="{{ url_for('student.food_detail', item_id=item.id) }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-sm btn-outline">
+                                Order Now
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        <div class="text-center section-cta">
+            {% if session_user and session_user.role == 'student' %}
+                <a href="{{ url_for('student.menu') }}" class="btn btn-outline btn-lg">Explore Full Menu →</a>
+            {% else %}
+                <a href="{{ url_for('auth.register') }}" class="btn btn-outline btn-lg">View Full Menu & Order →</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="section section-alt" id="how-it-works">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Simple Process</span>
+            <h2>How It Works</h2>
+            <p>Skip the long lunch lines in four easy steps</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <i class="fas fa-search-dollar step-icon"></i>
+                <h3>Browse Menu</h3>
+                <p>Explore categories from breakfast to main course and find your favorite food.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">2</div>
+                <i class="fas fa-cart-plus step-icon"></i>
+                <h3>Add to Cart</h3>
+                <p>Select items, adjust quantities, and customize your order easily.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">3</div>
+                <i class="fas fa-wallet step-icon"></i>
+                <h3>Easy Checkout</h3>
+                <p>Select pickup time (ASAP or scheduled) and pick your payment method.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">4</div>
+                <i class="fas fa-utensils step-icon"></i>
+                <h3>Live Track & Pick Up</h3>
+                <p>Follow real-time status updates and collect your piping hot meal right on time.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Use Our System -->
+<section class="section" id="why">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Key Benefits</span>
+            <h2>Why Use Our Canteen System</h2>
+            <p>Designed specially for fast-paced campus life</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon-wrapper"><i class="fas fa-clock"></i></div>
+                <h3>Zero Waiting Time</h3>
+                <p>Order between lectures and pick up ready meals without standing in long queues.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrapper"><i class="fas fa-mobile-alt"></i></div>
+                <h3>Order From Anywhere</h3>
+                <p>Place orders easily from your classroom, library, canteen table, or hostel.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrapper"><i class="fas fa-route"></i></div>
+                <h3>Live Order Tracking</h3>
+                <p>Visual status tracker shows when kitchen starts preparing and when food is ready.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrapper"><i class="fas fa-credit-card"></i></div>
+                <h3>Flexible Payments</h3>
+                <p>Supports Cash, eSewa, Khalti, and QR scanning with simulated instant payment flow.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Menu Categories Pills -->
+<section class="section section-alt" id="categories">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">Variety</span>
+            <h2>Menu Categories</h2>
+            <p>Delicious options crafted for every mealtime</p>
+        </div>
+        <div class="category-pills">
+            {% for cat in categories %}
+            <div class="category-pill-card">
+                <span class="category-pill-name">{{ cat.name }}</span>
+                <small class="category-pill-desc">{{ cat.description }}</small>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Canteen Information -->
+<section class="section canteen-info">
+    <div class="container info-grid">
+        <div class="info-content-card card">
+            <h2>Campus Canteen Info</h2>
+            <p>We take pride in providing hygienic, nutritious, and student-budget-friendly meals every single day.</p>
+            <ul class="info-list">
+                <li><i class="fas fa-clock"></i> <strong>Operating Hours:</strong> 7:00 AM – 8:00 PM (Sun–Fri)</li>
+                <li><i class="fas fa-map-marker-alt"></i> <strong>Location:</strong> Main Campus Block, Ground Floor Canteen Hall</li>
+                <li><i class="fas fa-phone-alt"></i> <strong>Phone:</strong> +977 9801111111 / +977 9841234567</li>
+                <li><i class="fas fa-envelope"></i> <strong>Email:</strong> canteen@college.edu.np</li>
+            </ul>
+        </div>
+        <div class="info-cta-card">
+            <h3>Hungry? Order in 30 Seconds!</h3>
+            <p>Join thousands of students and faculty enjoying queue-free canteen dining.</p>
+            <div class="cta-actions">
+                <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg">Create Free Account</a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">Sign In</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block footer %}{% include "partials/footer.html" %}{% endblock %}

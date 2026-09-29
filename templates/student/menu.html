@@ -1,0 +1,47 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Canteen Menu — Campus Canteen{% endblock %}
+{% block page_title %}Canteen Menu{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'menu' %}
+
+<div class="menu-header card">
+    <div class="menu-toolbar">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="search" id="menuSearch" placeholder="Search momo, chowmein, coffee, burger..." autocomplete="off">
+        </div>
+        <div class="filter-pills" id="categoryFilters">
+            <button type="button" class="filter-pill active" data-category="">
+                <i class="fas fa-border-all"></i> All Items
+            </button>
+            {% for cat in categories %}
+            <button type="button" class="filter-pill" data-category="{{ cat.id }}">
+                {{ cat.name }}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div id="menuLoading" class="loading-state">
+    <i class="fas fa-spinner fa-spin"></i>
+    <p>Loading freshly prepared canteen menu...</p>
+</div>
+
+<div id="menuGrid" class="food-grid"></div>
+
+<div id="menuEmpty" class="empty-state hidden card">
+    <i class="fas fa-search"></i>
+    <h2>No food items found</h2>
+    <p>Try searching for something else or clear the category filters.</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    MenuPage.init('{{ url_for("api.get_menu") }}');
+});
+</script>
+{% endblock %}

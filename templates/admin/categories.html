@@ -1,0 +1,128 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Menu Categories — Admin Console{% endblock %}
+{% block page_title %}Category Management{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'categories' %}
+
+<div class="categories-layout">
+    <!-- Add Category Form Card -->
+    <div class="card add-category-card">
+        <div class="card-header">
+            <h3><i class="fas fa-folder-plus"></i> Add New Category</h3>
+        </div>
+        <form method="POST" action="{{ url_for('admin.add_category') }}" class="admin-form">
+            <div class="form-group">
+                <label for="cat_name">Category Name *</label>
+                <input type="text" id="cat_name" name="name" required placeholder="e.g. Beverages, Bakery, Lunch Sets">
+            </div>
+            <div class="form-group">
+                <label for="cat_desc">Description (Optional)</label>
+                <textarea id="cat_desc" name="description" rows="2" placeholder="Brief description of items in this category..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="fas fa-plus"></i> Create Category
+            </button>
+        </form>
+    </div>
+
+    <!-- Categories List Table Card -->
+    <div class="card categories-table-card">
+        <div class="card-header">
+            <h3><i class="fas fa-tags"></i> Existing Categories ({{ categories|length }})</h3>
+        </div>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Category Name</th>
+                        <th>Description</th>
+                        <th>Total Items</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cat in categories %}
+                    <tr>
+                        <td><strong>{{ cat.name }}</strong></td>
+                        <td>{{ cat.description or '—' }}</td>
+                        <td><span class="badge badge-subtle">{{ cat.menu_items|length }} item(s)</span></td>
+                        <td>
+                            <div class="actions-cell">
+                                <button type="button" class="btn btn-xs btn-outline edit-cat-btn" 
+                                    data-id="{{ cat.id }}" 
+                                    data-name="{{ cat.name }}" 
+                                    data-description="{{ cat.description or '' }}">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <form method="POST" action="{{ url_for('admin.delete_category', cat_id=cat.id) }}" class="inline-form confirm-form" data-confirm="Are you sure you want to delete category '{{ cat.name }}'?">
+                                    <button type="submit" class="btn btn-xs btn-danger" {% if cat.menu_items %}disabled title="Cannot delete category containing food items"{% endif %}>
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Category Modal Dialog -->
+<div class="modal-overlay hidden" id="editCategoryModal">
+    <div class="modal-card card">
+        <div class="modal-header">
+            <h3><i class="fas fa-edit"></i> Edit Category</h3>
+            <button type="button" class="modal-close" id="closeCatModalBtn">&times;</button>
+        </div>
+        <form method="POST" id="editCategoryForm" action="">
+            <div class="form-group">
+                <label for="edit_cat_name">Category Name *</label>
+                <input type="text" id="edit_cat_name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="edit_cat_desc">Description</label>
+                <textarea id="edit_cat_desc" name="description" rows="3"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" id="cancelCatModalBtn">Cancel</button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    ConfirmActions.init();
+
+    const modal = document.getElementById('editCategoryModal');
+    const form = document.getElementById('editCategoryForm');
+    const nameInput = document.getElementById('edit_cat_name');
+    const descInput = document.getElementById('edit_cat_desc');
+    const closeBtn = document.getElementById('closeCatModalBtn');
+    const cancelBtn = document.getElementById('cancelCatModalBtn');
+
+    document.querySelectorAll('.edit-cat-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const catId = btn.dataset.id;
+            nameInput.value = btn.dataset.name;
+            descInput.value = btn.dataset.description;
+            form.action = `/admin/categories/${catId}/edit`;
+            modal.classList.remove('hidden');
+        });
+    });
+
+    const hideModal = () => modal.classList.add('hidden');
+    closeBtn?.addEventListener('click', hideModal);
+    cancelBtn?.addEventListener('click', hideModal);
+    modal?.addEventListener('click', (e) => {
+        if (e.target === modal) hideModal();
+    });
+});
+</script>
+{% endblock %}

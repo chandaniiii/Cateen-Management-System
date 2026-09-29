@@ -1,0 +1,157 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Order #{{ order.id }} Details — Campus Canteen{% endblock %}
+{% block page_title %}Order Receipt #{{ order.id }}{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'orders' %}
+
+<div class="order-receipt-card card">
+    <div class="receipt-header">
+        <div>
+            <h2>Order #{{ order.id }}</h2>
+            <p class="text-muted"><i class="fas fa-calendar-alt"></i> {{ order.created_at.strftime('%A, %B %d, %Y at %I:%M %p') if order.created_at else '' }}</p>
+        </div>
+        <div class="receipt-status-pill">
+            <span class="status-badge status-{{ order.status }} status-badge-lg">{{ order.status|title }}</span>
+        </div>
+    </div>
+
+    <!-- Info Row -->
+    <div class="receipt-meta-grid">
+        <div class="meta-box">
+            <span class="text-muted">Customer</span>
+            <strong>{{ order.user.name }}</strong>
+            <small>{{ order.user.student_id or 'Student' }}</small>
+        </div>
+        <div class="meta-box">
+            <span class="text-muted">Pickup Schedule</span>
+            <strong>{{ order.pickup_time }}</strong>
+            <small>Canteen Counter</small>
+        </div>
+        <div class="meta-box">
+            <span class="text-muted">Payment</span>
+            <strong>{{ order.payment_method|title }}</strong>
+            <small class="badge badge-subtle">{{ order.payment_status|title }}</small>
+        </div>
+    </div>
+
+    <!-- Items Table -->
+    <div class="table-responsive receipt-table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Item Description</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th class="text-right">Line Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.items %}
+                <tr>
+                    <td>
+                        <div class="item-name-cell">
+                            <strong>{{ item.menu_item.name }}</strong>
+                            <small class="text-muted">{{ item.menu_item.category.name if item.menu_item.category else '' }}</small>
+                        </div>
+                    </td>
+                    <td>Rs. {{ '%.0f'|format(item.price) }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td class="text-right"><strong class="price-text">Rs. {{ '%.0f'|format(item.price * item.quantity) }}</strong></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-right"><strong>Subtotal:</strong></td>
+                    <td class="text-right">Rs. {{ '%.0f'|format(order.total_amount) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-right"><strong>Service & Taxes:</strong></td>
+                    <td class="text-right text-success">Rs. 0 (Included)</td>
+                </tr>
+                <tr class="grand-total-row">
+                    <td colspan="3" class="text-right"><strong>Grand Total:</strong></td>
+                    <td class="text-right"><strong class="total-amount">Rs. {{ '%.0f'|format(order.total_amount) }}</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="receipt-actions">
+        {% if order.status not in ['completed', 'cancelled'] %}
+            <a href="{{ url_for('student.track_order', order_id=order.id) }}" class="btn btn-primary">
+                <i class="fas fa-map-marker-alt"></i> Live Track Order
+            </a>
+        {% endif %}
+        <a href="{{ url_for('student.orders') }}" class="btn btn-outline">
+            <i class="fas fa-arrow-left"></i> Back to Orders
+        </a>
+        <button type="button" class="btn btn-outline" onclick="window.print()">
+            <i class="fas fa-print"></i> Print Receipt
+        </button>
+    </div>
+</div>
+
+<!-- Reviews Section for Completed Orders -->
+{% if can_review %}
+<section class="card review-form-section">
+    <div class="section-title-row">
+        <i class="fas fa-star" style="color: #f59e0b;"></i>
+        <h2>Rate & Review Your Food</h2>
+    </div>
+    <p class="text-muted">How was your meal? Your rating and review help our canteen kitchen improve!</p>
+
+    <div class="reviews-forms-list">
+        {% for item in order.items %}
+        {% set existing_rev = existing_reviews.get(item.menu_item_id) if existing_reviews else None %}
+        <div class="review-form-item card" data-order-id="{{ order.id }}" data-item-id="{{ item.menu_item_id }}">
+            <div class="review-item-header">
+                <h3>{{ item.menu_item.name }}</h3>
+                <span class="food-category-sm">{{ item.menu_item.category.name if item.menu_item.category else '' }}</span>
+            </div>
+
+            {% if existing_rev %}
+                <div class="existing-review-display">
+                    <span class="text-success"><i class="fas fa-check-circle"></i> You reviewed this item:</span>
+                    <div class="stars-gold">
+                        {% for i in range(existing_rev.rating) %}★{% endfor %}
+                        {% for i in range(5 - existing_rev.rating) %}<span class="star-empty">★</span>{% endfor %}
+                    </div>
+                    {% if existing_rev.comment %}
+                        <p class="review-quote">"{{ existing_rev.comment }}"</p>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="rating-input-row">
+                    <label>Select Rating:</label>
+                    <div class="star-rating" data-rating="0">
+                        <button type="button" class="star-btn" data-value="1" title="1 Star">★</button>
+                        <button type="button" class="star-btn" data-value="2" title="2 Stars">★</button>
+                        <button type="button" class="star-btn" data-value="3" title="3 Stars">★</button>
+                        <button type="button" class="star-btn" data-value="4" title="4 Stars">★</button>
+                        <button type="button" class="star-btn" data-value="5" title="5 Stars">★</button>
+                    </div>
+                    <span class="rating-label-feedback text-muted">Click a star</span>
+                </div>
+                <div class="form-group">
+                    <textarea class="review-comment" placeholder="Write feedback about this item (taste, temperature, seasoning)..." rows="2"></textarea>
+                </div>
+                <button type="button" class="btn btn-sm btn-primary submit-review">
+                    <i class="fas fa-paper-plane"></i> Submit Review
+                </button>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    Reviews.init();
+});
+</script>
+{% endblock %}

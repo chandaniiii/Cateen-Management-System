@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block body_class %}dashboard-layout{% endblock %}
+
+{% block navbar %}
+<header class="dashboard-topbar">
+    <button class="nav-toggle" id="sidebarToggle" aria-label="Toggle sidebar menu">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="topbar-brand">
+        <span class="topbar-title">{% block page_title %}Dashboard{% endblock %}</span>
+    </div>
+    <div class="topbar-actions">
+        {% if session_user and session_user.role == 'student' %}
+        <a href="{{ url_for('student.cart') }}" class="topbar-cart-btn" title="View Cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="badge-count cart-badge {% if not cart_count %}hidden{% endif %}">{{ cart_count or 0 }}</span>
+        </a>
+        {% endif %}
+        <div class="topbar-user-badge">
+            <span class="avatar-circle">{{ session_user.name[0]|upper if session_user else 'U' }}</span>
+            <span class="user-name-text">{{ session_user.name if session_user else '' }}</span>
+            <span class="user-role-tag role-{{ session_user.role if session_user else 'student' }}">{{ session_user.role|title if session_user else '' }}</span>
+        </div>
+    </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    {% block sidebar %}
+    {% include "partials/sidebar.html" %}
+    {% endblock %}
+    <div class="dashboard-content">
+        {% block dashboard_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

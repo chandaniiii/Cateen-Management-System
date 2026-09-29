@@ -1,0 +1,127 @@
+{% extends "dashboard_base.html" %}
+{% block title %}{{ item.name }} — Campus Canteen{% endblock %}
+{% block page_title %}{{ item.name }}{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'menu' %}
+
+<div class="food-detail-grid">
+    <div class="food-detail-image card">
+        <img src="{{ item.image or url_for('static', filename='images/food-placeholder.svg') }}" alt="{{ item.name }}">
+    </div>
+    <div class="food-detail-info card">
+        <div class="food-detail-header">
+            <span class="food-badge">{{ item.category.name }}</span>
+            <h1>{{ item.name }}</h1>
+        </div>
+
+        <div class="rating-display-row">
+            {% if avg_rating %}
+                <div class="stars-gold">
+                    {% for i in range(1, 6) %}
+                        {% if i <= avg_rating|round %}
+                            <i class="fas fa-star"></i>
+                        {% else %}
+                            <i class="far fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <strong class="rating-num">{{ avg_rating }} / 5.0</strong>
+                <span class="text-muted">({{ reviews|length }} review{{ 's' if reviews|length != 1 else '' }})</span>
+            {% else %}
+                <span class="text-muted"><i class="far fa-star"></i> No reviews yet</span>
+            {% endif %}
+        </div>
+
+        <div class="price-lg">Rs. {{ '%.0f'|format(item.price) }}</div>
+
+        <div class="availability-badge-wrapper">
+            {% if item.stock_status == 'out_of_stock' %}
+                <span class="availability out"><i class="fas fa-times-circle"></i> Out of Stock</span>
+            {% elif item.stock_status == 'low_stock' %}
+                <span class="availability low"><i class="fas fa-exclamation-triangle"></i> Low Stock (Only {{ item.stock }} left!)</span>
+            {% else %}
+                <span class="availability in"><i class="fas fa-check-circle"></i> In Stock ({{ item.stock }} available)</span>
+            {% endif %}
+        </div>
+
+        <p class="food-detail-desc">{{ item.description }}</p>
+
+        {% if item.is_available and item.stock > 0 %}
+        <div class="purchase-box">
+            <label for="quantity"><strong>Quantity:</strong></label>
+            <div class="purchase-controls">
+                <div class="qty-selector">
+                    <button type="button" class="qty-btn" data-action="decrease" aria-label="Decrease quantity">−</button>
+                    <input type="number" id="quantity" value="1" min="1" max="{{ item.stock }}" readonly>
+                    <button type="button" class="qty-btn" data-action="increase" aria-label="Increase quantity">+</button>
+                </div>
+                <button type="button" class="btn btn-primary btn-lg" id="addToCartBtn" data-item-id="{{ item.id }}">
+                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                </button>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert-box alert-warning">
+            <i class="fas fa-info-circle"></i> This item is currently unavailable or out of stock. Please check back later!
+        </div>
+        {% endif %}
+
+        <div class="detail-nav-actions">
+            <a href="{{ url_for('student.menu') }}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Menu
+            </a>
+            <a href="{{ url_for('student.cart') }}" class="btn btn-secondary">
+                <i class="fas fa-shopping-bag"></i> View Cart (<span class="cart-badge">{{ cart_count or 0 }}</span>)
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Customer Reviews Section -->
+<section class="card reviews-section">
+    <div class="section-header-row">
+        <h2>Customer Reviews & Ratings</h2>
+        <span class="badge">{{ reviews|length }} Total</span>
+    </div>
+
+    {% if reviews %}
+        <div class="reviews-list">
+            {% for rev in reviews %}
+            <div class="review-item">
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <span class="avatar-circle-sm">{{ rev.user.name[0]|upper }}</span>
+                        <strong>{{ rev.user.name }}</strong>
+                    </div>
+                    <div class="review-rating-time">
+                        <span class="stars-gold">
+                            {% for i in range(rev.rating) %}★{% endfor %}
+                            {% for i in range(5 - rev.rating) %}<span class="star-empty">★</span>{% endfor %}
+                        </span>
+                        <small class="text-muted">{{ rev.created_at.strftime('%b %d, %Y') if rev.created_at else '' }}</small>
+                    </div>
+                </div>
+                {% if rev.comment %}
+                    <p class="review-text">{{ rev.comment }}</p>
+                {% else %}
+                    <p class="review-text text-muted"><em>Rated {{ rev.rating }} out of 5 stars</em></p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state-sm">
+            <p>No customer reviews yet. Order this item and be the first to leave a review!</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    Cart.initAddToCart({{ item.id }}, {{ item.stock }});
+});
+</script>
+{% endblock %}

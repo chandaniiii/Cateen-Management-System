@@ -1,0 +1,94 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Orders Management — Staff Console{% endblock %}
+{% block page_title %}Staff Orders — {{ current_status|title }} View{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'orders' %}
+
+<div class="page-header-row">
+    <div>
+        <h2>Staff Order Pipeline</h2>
+        <p class="text-muted">Filtered view of orders by kitchen processing status</p>
+    </div>
+    <!-- Filter Tabs -->
+    <div class="filter-pills">
+        <a href="{{ url_for('staff.orders', status='all') }}" class="filter-pill {% if current_status == 'all' %}active{% endif %}">
+            All ({{ orders|length if current_status == 'all' else 'All' }})
+        </a>
+        <a href="{{ url_for('staff.orders', status='new') }}" class="filter-pill {% if current_status == 'new' %}active{% endif %}">
+            <i class="fas fa-bell"></i> New / Pending
+        </a>
+        <a href="{{ url_for('staff.orders', status='preparing') }}" class="filter-pill {% if current_status == 'preparing' %}active{% endif %}">
+            <i class="fas fa-fire"></i> Preparing
+        </a>
+        <a href="{{ url_for('staff.orders', status='ready') }}" class="filter-pill {% if current_status == 'ready' %}active{% endif %}">
+            <i class="fas fa-check-circle"></i> Ready
+        </a>
+        <a href="{{ url_for('staff.orders', status='completed') }}" class="filter-pill {% if current_status == 'completed' %}active{% endif %}">
+            <i class="fas fa-clipboard-check"></i> Completed
+        </a>
+    </div>
+</div>
+
+<div class="table-responsive card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Student / Customer</th>
+                <th>Items Ordered</th>
+                <th>Total</th>
+                <th>Pickup Option</th>
+                <th>Time Placed</th>
+                <th>Status</th>
+                <th>Workflow Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('staff.order_detail', order_id=order.id) }}" class="order-id-link">
+                        <strong>#{{ order.id }}</strong>
+                    </a>
+                </td>
+                <td>
+                    <div class="user-cell">
+                        <strong>{{ order.user.name }}</strong>
+                        <small class="text-muted">{{ order.user.phone or order.user.student_id or order.user.email }}</small>
+                    </div>
+                </td>
+                <td>
+                    <span class="items-summary-text">
+                        {% for item in order.items %}
+                            {{ item.menu_item.name }} × {{ item.quantity }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </span>
+                </td>
+                <td><strong class="price-text">Rs. {{ '%.0f'|format(order.total_amount) }}</strong></td>
+                <td><span class="badge badge-subtle">{{ order.pickup_time }}</span></td>
+                <td>{{ order.created_at.strftime('%I:%M %p (%b %d)') if order.created_at else '' }}</td>
+                <td><span class="status-badge status-{{ order.status }}">{{ order.status|title }}</span></td>
+                <td>
+                    {% include 'partials/order_status_actions.html' %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8" class="text-center py-4">
+                    <p class="text-muted">No orders found in "{{ current_status|title }}" status.</p>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    ConfirmActions.init();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Order Confirmed #{{ order.id }} — Campus Canteen{% endblock %}
+{% block page_title %}Order Confirmation{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'orders' %}
+
+<div class="confirmation-container">
+    <div class="confirmation-card card">
+        <div class="confirmation-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        <h1>Order Placed Successfully!</h1>
+        <p class="order-id-badge">Order <strong>#{{ order.id }}</strong></p>
+        <p class="confirmation-subtitle">Your order has been sent to the canteen kitchen and is being processed.</p>
+
+        <div class="confirmation-details">
+            <div class="detail-row">
+                <span>Order Status</span>
+                <span class="status-badge status-{{ order.status }}">{{ order.status|title }}</span>
+            </div>
+            <div class="detail-row">
+                <span>Payment Method</span>
+                <strong>{{ order.payment_method|title }} ({{ order.payment_status|title }})</strong>
+            </div>
+            <div class="detail-row">
+                <span>Pickup Time</span>
+                <strong>{{ order.pickup_time }}</strong>
+            </div>
+            <div class="detail-row">
+                <span>Estimated Prep Time</span>
+                <span class="text-primary font-weight-bold">15–20 minutes</span>
+            </div>
+            <div class="detail-row total-row">
+                <span>Total Paid / Payable</span>
+                <strong class="total-price">Rs. {{ '%.0f'|format(order.total_amount) }}</strong>
+            </div>
+        </div>
+
+        <div class="confirmation-items-box">
+            <h3>Items Ordered</h3>
+            <ul class="order-items-list">
+                {% for item in order.items %}
+                <li>
+                    <span class="item-name">{{ item.menu_item.name }} × {{ item.quantity }}</span>
+                    <span class="item-price">Rs. {{ '%.0f'|format(item.price * item.quantity) }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="confirmation-actions">
+            <a href="{{ url_for('student.track_order', order_id=order.id) }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-map-marker-alt"></i> Live Track Order
+            </a>
+            <a href="{{ url_for('student.menu') }}" class="btn btn-outline btn-lg">
+                <i class="fas fa-utensils"></i> Continue Shopping
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

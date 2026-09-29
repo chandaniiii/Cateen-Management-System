@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5eb"/>
+      <stop offset="100%" stop-color="#fed7aa"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  
+  <!-- Bowl -->
+  <ellipse cx="200" cy="200" rx="140" ry="50" fill="#e2e8f0" filter="url(#shadow)"/>
+  <ellipse cx="200" cy="180" rx="130" ry="60" fill="#f8fafc"/>
+  
+  <!-- Mound of golden fried rice -->
+  <path d="M90,175 C90,120 150,110 200,110 C250,110 310,120 310,175 Z" fill="#fef08a"/>
+  
+  <!-- Rice grains & textured spots -->
+  <ellipse cx="160" cy="140" rx="6" ry="3" fill="#fde047" transform="rotate(20 160 140)"/>
+  <ellipse cx="210" cy="130" rx="6" ry="3" fill="#fde047" transform="rotate(-15 210 130)"/>
+  <ellipse cx="240" cy="150" rx="6" ry="3" fill="#fde047" transform="rotate(35 240 150)"/>
+  <ellipse cx="180" cy="160" rx="6" ry="3" fill="#fde047" transform="rotate(-30 180 160)"/>
+  
+  <!-- Peas (green) -->
+  <circle cx="150" cy="150" r="5" fill="#22c55e"/>
+  <circle cx="190" cy="135" r="5.5" fill="#16a34a"/>
+  <circle cx="230" cy="145" r="5" fill="#22c55e"/>
+  <circle cx="260" cy="160" r="4.5" fill="#15803d"/>
+  
+  <!-- Carrots (orange) -->
+  <rect x="170" y="145" width="8" height="6" rx="1" fill="#f97316"/>
+  <rect x="215" y="155" width="9" height="5" rx="1" fill="#ea580c"/>
+  <rect x="135" y="165" width="7" height="6" rx="1" fill="#f97316"/>
+  
+  <!-- Scrambled Egg bits (yellow-orange) -->
+  <path d="M185,120 Q195,115 205,122 T190,130 Z" fill="#fbbf24"/>
+  <path d="M220,135 Q235,130 240,140 T225,145 Z" fill="#f59e0b"/>
+  
+  <!-- Steam -->
+  <path d="M180,95 Q170,75 180,55" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+  <path d="M220,90 Q230,70 220,50" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+</svg>

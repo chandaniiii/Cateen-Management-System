@@ -1,0 +1,93 @@
+{% extends "dashboard_base.html" %}
+{% block title %}My Cart — Campus Canteen{% endblock %}
+{% block page_title %}Shopping Cart{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'cart' %}
+
+{% if items %}
+<div class="cart-layout">
+    <div class="cart-items-container">
+        <div class="cart-items-header">
+            <h2>Cart Items ({{ items|length }})</h2>
+            <a href="{{ url_for('student.menu') }}" class="link"><i class="fas fa-plus"></i> Add more items</a>
+        </div>
+        <div class="cart-items-list">
+            {% for entry in items %}
+            <div class="cart-item card">
+                <div class="cart-item-image">
+                    <img src="{{ entry.item.image or url_for('static', filename='images/food-placeholder.svg') }}" alt="{{ entry.item.name }}">
+                </div>
+                <div class="cart-item-info">
+                    <span class="food-category-sm">{{ entry.item.category.name }}</span>
+                    <h3>{{ entry.item.name }}</h3>
+                    <span class="unit-price">Rs. {{ '%.0f'|format(entry.item.price) }} each</span>
+                </div>
+                <div class="cart-item-controls">
+                    <div class="qty-selector small">
+                        <button type="button" class="qty-btn cart-update" data-id="{{ entry.item.id }}" data-action="decrease" aria-label="Decrease quantity">−</button>
+                        <span class="qty-value">{{ entry.quantity }}</span>
+                        <button type="button" class="qty-btn cart-update" data-id="{{ entry.item.id }}" data-action="increase" aria-label="Increase quantity">+</button>
+                    </div>
+                    <div class="line-total-wrapper">
+                        <span class="line-total">Rs. {{ '%.0f'|format(entry.line_total) }}</span>
+                    </div>
+                    <button type="button" class="btn-icon cart-remove" data-id="{{ entry.item.id }}" title="Remove item" aria-label="Remove item">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <aside class="cart-summary card">
+        <h2>Order Summary</h2>
+        <div class="summary-list">
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <strong>Rs. {{ '%.0f'|format(subtotal) }}</strong>
+            </div>
+            <div class="summary-row">
+                <span>Service / Packaging Charge</span>
+                <span class="text-success">Rs. 0 (Free)</span>
+            </div>
+            <div class="summary-row">
+                <span>Estimated Prep Time</span>
+                <span>15–20 mins</span>
+            </div>
+            <div class="summary-divider"></div>
+            <div class="summary-row total">
+                <span>Grand Total</span>
+                <span class="total-amount">Rs. {{ '%.0f'|format(total) }}</span>
+            </div>
+        </div>
+        <a href="{{ url_for('student.checkout') }}" class="btn btn-primary btn-block btn-lg">
+            <i class="fas fa-arrow-right"></i> Proceed to Checkout
+        </a>
+        <a href="{{ url_for('student.menu') }}" class="btn btn-outline btn-block">
+            Continue Ordering
+        </a>
+    </aside>
+</div>
+{% else %}
+<div class="empty-state card">
+    <div class="empty-icon-wrapper">
+        <i class="fas fa-shopping-cart"></i>
+    </div>
+    <h2>Your cart is currently empty</h2>
+    <p>Explore our tasty menu and add your favorite momo, chowmein, or beverages!</p>
+    <a href="{{ url_for('student.menu') }}" class="btn btn-primary btn-lg">
+        <i class="fas fa-utensils"></i> Browse Campus Menu
+    </a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    Cart.initCartPage();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "dashboard_base.html" %}
+{% block title %}All Orders — Admin Console{% endblock %}
+{% block page_title %}Order Management{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'orders' %}
+
+<div class="page-header-row">
+    <div>
+        <h2>All Orders ({{ orders|length }})</h2>
+        <p class="text-muted">Master log of all placed canteen orders across all statuses</p>
+    </div>
+</div>
+
+<div class="table-responsive card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Student / Customer</th>
+                <th>Items Ordered</th>
+                <th>Total (NPR)</th>
+                <th>Payment</th>
+                <th>Pickup Time</th>
+                <th>Date & Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td><strong>#{{ order.id }}</strong></td>
+                <td>
+                    <div class="user-cell">
+                        <strong>{{ order.user.name }}</strong>
+                        <small class="text-muted">{{ order.user.email }}</small>
+                    </div>
+                </td>
+                <td>
+                    <span class="items-summary-text">
+                        {% for item in order.items %}
+                            {{ item.menu_item.name }} ({{ item.quantity }}){% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </span>
+                </td>
+                <td><strong class="price-text">Rs. {{ '%.0f'|format(order.total_amount) }}</strong></td>
+                <td>
+                    <span>{{ order.payment_method|title }}</span>
+                    <small class="badge badge-subtle">{{ order.payment_status|title }}</small>
+                </td>
+                <td><span class="badge badge-subtle">{{ order.pickup_time }}</span></td>
+                <td>{{ order.created_at.strftime('%b %d, %Y (%I:%M %p)') if order.created_at else '' }}</td>
+                <td><span class="status-badge status-{{ order.status }}">{{ order.status|title }}</span></td>
+                <td>
+                    <a href="{{ url_for('staff.order_detail', order_id=order.id) }}" class="btn btn-xs btn-outline">
+                        <i class="fas fa-eye"></i> View / Manage
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="9" class="text-center py-4">No orders in database.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Sales Analytics & Reports — Admin Console{% endblock %}
+{% block page_title %}Canteen Sales Analytics & Reports{% endblock %}
+
+{% block dashboard_content %}
+{% set active_page = 'reports' %}
+
+<div class="page-header-row">
+    <div>
+        <h2>Sales & Order Analytics</h2>
+        <p class="text-muted">Visual charts detailing daily revenue trends, weekly demand volume, and category distribution</p>
+    </div>
+    <div class="header-actions">
+        <button type="button" class="btn btn-outline" onclick="window.print()">
+            <i class="fas fa-print"></i> Export / Print Report
+        </button>
+    </div>
+</div>
+
+<div class="charts-grid full-width">
+    <div class="card chart-card">
+        <div class="chart-header">
+            <h3><i class="fas fa-chart-line"></i> Daily Revenue (7-Day Trend)</h3>
+            <span class="badge badge-subtle">NPR (Rs.)</span>
+        </div>
+        <canvas id="dailySalesChart"></canvas>
+    </div>
+    <div class="card chart-card">
+        <div class="chart-header">
+            <h3><i class="fas fa-calendar-alt"></i> Weekly Order Volume</h3>
+            <span class="badge badge-subtle">Past 4 Weeks</span>
+        </div>
+        <canvas id="weeklyOrdersChart"></canvas>
+    </div>
+    <div class="card chart-card">
+        <div class="chart-header">
+            <h3><i class="fas fa-fire"></i> Top Selling Menu Items</h3>
+            <span class="badge badge-subtle">Quantity Sold</span>
+        </div>
+        <canvas id="popularFoodsChart"></canvas>
+    </div>
+    <div class="card chart-card">
+        <div class="chart-header">
+            <h3><i class="fas fa-layer-group"></i> Revenue Distribution by Category</h3>
+            <span class="badge badge-subtle">NPR (Rs.)</span>
+        </div>
+        <canvas id="categoryRevenueChart"></canvas>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    AdminCharts.init('{{ url_for("admin.api_reports") }}');
+});
+</script>
+{% endblock %}
