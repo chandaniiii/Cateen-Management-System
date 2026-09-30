@@ -171,7 +171,7 @@ const MenuPage = {
             grid.innerHTML = data.items.map(item => `
                 <article class="food-card">
                     <div class="food-card-image">
-                        <img src="${item.image || '/static/images/food-placeholder.svg'}" alt="${item.name}" loading="lazy">
+                        <img src="${item.image || '/static/images/food-placeholder.jpg'}" alt="${item.name}" loading="lazy">
                         <span class="food-badge">${item.category || ''}</span>
                     </div>
                     <div class="food-card-body">

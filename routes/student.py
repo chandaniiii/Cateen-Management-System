@@ -313,7 +313,7 @@ def api_get_cart():
                     "price": float(menu_item.price),
                     "quantity": qty,
                     "line_total": line_total,
-                    "image": menu_item.image or "/static/images/food-placeholder.svg",
+                    "image": menu_item.image or "/static/images/food-placeholder.jpg",
                 }
             )
     return jsonify({"items": items, "subtotal": subtotal, "total": subtotal, "count": cart_count()})

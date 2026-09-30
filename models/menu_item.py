@@ -35,7 +35,7 @@ class MenuItem(db.Model):
             "name": self.name,
             "description": self.description,
             "price": float(self.price),
-            "image": self.image or "/static/images/food-placeholder.svg",
+            "image": self.image or "/static/images/food-placeholder.jpg",
             "stock": self.stock,
             "minimum_stock": self.minimum_stock,
             "is_available": self.is_available and self.stock > 0,

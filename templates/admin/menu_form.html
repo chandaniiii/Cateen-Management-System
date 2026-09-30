@@ -56,7 +56,7 @@
             <div class="form-row">
                 <div class="form-group flex-2">
                     <label for="image"><i class="fas fa-image"></i> Food Image (Upload image or leave empty for default)</label>
-                    <input type="file" id="image" name="image" accept="image/*,.svg">
+                    <input type="file" id="image" name="image" accept="image/*,.jpg">
                     {% if item and item.image %}
                     <small class="text-muted d-block mt-1">Current image: <a href="{{ item.image }}" target="_blank">{{ item.image }}</a></small>
                     {% endif %}

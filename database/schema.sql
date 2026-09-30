@@ -126,24 +126,24 @@ INSERT INTO `categories` (`id`, `name`, `description`) VALUES
 
 -- Menu Items (Nepalese / College Canteen Pricing in NPR)
 INSERT INTO `menu_items` (`id`, `category_id`, `name`, `description`, `price`, `image`, `stock`, `minimum_stock`, `is_available`, `created_at`) VALUES
-(1, 3, 'Steam Momo (Buff/Veg)', 'Authentic freshly steamed dumplings served with hot spicy sesame tomato chutney', 120.00, '/static/images/momo.svg', 50, 10, TRUE, NOW()),
-(2, 3, 'Veg / Chicken Chowmein', 'Wok-tossed noodles with shredded vegetables and special canteen spice blend', 100.00, '/static/images/chowmein.svg', 45, 10, TRUE, NOW()),
-(3, 3, 'Egg Fried Rice', 'Aromatic stir-fried rice loaded with scrambled egg, garden peas, and spring onions', 110.00, '/static/images/fried-rice.svg', 35, 10, TRUE, NOW()),
-(4, 3, 'Special Nepali Dal Bhat Set', 'Complete traditional thali with steamed rice, yellow lentils, seasonal tarkari, and pickle', 130.00, '/static/images/dal-bhat.svg', 30, 8, TRUE, NOW()),
-(5, 2, 'Crispy Samosa (2 pcs)', 'Golden crisp pastry triangles filled with spiced cumin potatoes and green peas', 30.00, '/static/images/samosa.svg', 80, 15, TRUE, NOW()),
-(6, 4, 'Grilled Veg Sandwich', 'Toasted triple-layer sandwich with cheese, crisp cucumber, tomato, and mint chutney', 80.00, '/static/images/sandwich.svg', 40, 10, TRUE, NOW()),
-(7, 4, 'Crispy Chicken Burger', 'Juicy chicken patty layered with lettuce, cheese slice, and creamy mayo sauce', 150.00, '/static/images/burger.svg', 30, 8, TRUE, NOW()),
-(8, 4, 'Cheese Pizza Slice', 'Oven-baked crust topped with rich herb tomato sauce and melted mozzarella cheese', 180.00, '/static/images/pizza.svg', 25, 8, TRUE, NOW()),
-(9, 2, 'Golden French Fries', 'Crispy fried potato batons lightly salted and served with tomato ketchup', 90.00, '/static/images/fries.svg', 60, 12, TRUE, NOW()),
-(10, 1, 'Aloo Paratha with Curd', 'Warm whole wheat stuffed flatbread served with fresh curd and spicy mixed pickle', 70.00, '/static/images/paratha.svg', 40, 10, TRUE, NOW()),
-(11, 1, 'Masala Omelette & Toast', 'Fluffy 2-egg omelette with onions, green chillies, coriander, and toasted butter bread', 90.00, '/static/images/omelette.svg', 35, 8, TRUE, NOW()),
-(12, 5, 'Hot Brewed Coffee', 'Rich freshly brewed aromatic milk coffee to power through study sessions', 80.00, '/static/images/coffee.svg', 100, 20, TRUE, NOW()),
-(13, 5, 'Nepali Masala Chiya', 'Classic spiced milk tea infused with cardamom, ginger, and cloves', 40.00, '/static/images/chiya.svg', 120, 25, TRUE, NOW()),
-(14, 5, 'Cold Drinks (300ml)', 'Chilled soda bottle (Coke, Fanta, Sprite)', 60.00, '/static/images/cold-drinks.svg', 80, 15, TRUE, NOW()),
-(15, 5, 'Sweet Curd Lassi', 'Chilled creamy yogurt smoothie topped with sliced almonds', 70.00, '/static/images/lassi.svg', 50, 10, TRUE, NOW()),
-(16, 6, 'Hot Gulab Jamun (2 pcs)', 'Soft golden milk dough balls soaked in warm saffron cardamom sugar syrup', 50.00, '/static/images/gulab-jamun.svg', 40, 10, TRUE, NOW()),
-(17, 6, 'Vanilla / Chocolate Ice Cream', 'Creamy scoop of vanilla or rich chocolate ice cream', 60.00, '/static/images/ice-cream.svg', 45, 10, TRUE, NOW()),
-(18, 2, 'Spicy Wai Wai Sadeko', 'Crunchy instant noodles tossed with chopped onions, tomatoes, lime, and chilli powder', 50.00, '/static/images/wai-wai.svg', 70, 15, TRUE, NOW());
+(1, 3, 'Steam Momo (Buff/Veg)', 'Authentic freshly steamed dumplings served with hot spicy sesame tomato chutney', 120.00, '/static/images/momo.jpg', 50, 10, TRUE, NOW()),
+(2, 3, 'Veg / Chicken Chowmein', 'Wok-tossed noodles with shredded vegetables and special canteen spice blend', 100.00, '/static/images/chowmein.jpg', 45, 10, TRUE, NOW()),
+(3, 3, 'Egg Fried Rice', 'Aromatic stir-fried rice loaded with scrambled egg, garden peas, and spring onions', 110.00, '/static/images/fried-rice.jpg', 35, 10, TRUE, NOW()),
+(4, 3, 'Special Nepali Dal Bhat Set', 'Complete traditional thali with steamed rice, yellow lentils, seasonal tarkari, and pickle', 130.00, '/static/images/dal-bhat.jpg', 30, 8, TRUE, NOW()),
+(5, 2, 'Crispy Samosa (2 pcs)', 'Golden crisp pastry triangles filled with spiced cumin potatoes and green peas', 30.00, '/static/images/samosa.jpg', 80, 15, TRUE, NOW()),
+(6, 4, 'Grilled Veg Sandwich', 'Toasted triple-layer sandwich with cheese, crisp cucumber, tomato, and mint chutney', 80.00, '/static/images/sandwich.jpg', 40, 10, TRUE, NOW()),
+(7, 4, 'Crispy Chicken Burger', 'Juicy chicken patty layered with lettuce, cheese slice, and creamy mayo sauce', 150.00, '/static/images/burger.jpg', 30, 8, TRUE, NOW()),
+(8, 4, 'Cheese Pizza Slice', 'Oven-baked crust topped with rich herb tomato sauce and melted mozzarella cheese', 180.00, '/static/images/pizza.jpg', 25, 8, TRUE, NOW()),
+(9, 2, 'Golden French Fries', 'Crispy fried potato batons lightly salted and served with tomato ketchup', 90.00, '/static/images/fries.jpg', 60, 12, TRUE, NOW()),
+(10, 1, 'Aloo Paratha with Curd', 'Warm whole wheat stuffed flatbread served with fresh curd and spicy mixed pickle', 70.00, '/static/images/paratha.jpg', 40, 10, TRUE, NOW()),
+(11, 1, 'Masala Omelette & Toast', 'Fluffy 2-egg omelette with onions, green chillies, coriander, and toasted butter bread', 90.00, '/static/images/omelette.jpg', 35, 8, TRUE, NOW()),
+(12, 5, 'Hot Brewed Coffee', 'Rich freshly brewed aromatic milk coffee to power through study sessions', 80.00, '/static/images/coffee.jpg', 100, 20, TRUE, NOW()),
+(13, 5, 'Nepali Masala Chiya', 'Classic spiced milk tea infused with cardamom, ginger, and cloves', 40.00, '/static/images/chiya.jpg', 120, 25, TRUE, NOW()),
+(14, 5, 'Cold Drinks (300ml)', 'Chilled soda bottle (Coke, Fanta, Sprite)', 60.00, '/static/images/cold-drinks.jpg', 80, 15, TRUE, NOW()),
+(15, 5, 'Sweet Curd Lassi', 'Chilled creamy yogurt smoothie topped with sliced almonds', 70.00, '/static/images/lassi.jpg', 50, 10, TRUE, NOW()),
+(16, 6, 'Hot Gulab Jamun (2 pcs)', 'Soft golden milk dough balls soaked in warm saffron cardamom sugar syrup', 50.00, '/static/images/gulab-jamun.jpg', 40, 10, TRUE, NOW()),
+(17, 6, 'Vanilla / Chocolate Ice Cream', 'Creamy scoop of vanilla or rich chocolate ice cream', 60.00, '/static/images/ice-cream.jpg', 45, 10, TRUE, NOW()),
+(18, 2, 'Spicy Wai Wai Sadeko', 'Crunchy instant noodles tossed with chopped onions, tomatoes, lime, and chilli powder', 50.00, '/static/images/wai-wai.jpg', 70, 15, TRUE, NOW());
 
 -- Sample Orders
 INSERT INTO `orders` (`id`, `user_id`, `total_amount`, `status`, `payment_method`, `payment_status`, `pickup_time`, `created_at`) VALUES

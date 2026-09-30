@@ -35,7 +35,7 @@
             {% for item in items %}
             <tr>
                 <td>
-                    <img src="{{ item.image or url_for('static', filename='images/food-placeholder.svg') }}" alt="{{ item.name }}" class="table-thumb-img">
+                    <img src="{{ item.image or url_for('static', filename='images/food-placeholder.jpg') }}" alt="{{ item.name }}" class="table-thumb-img">
                 </td>
                 <td>
                     <strong>{{ item.name }}</strong>

@@ -30,7 +30,7 @@ class CartItem:
             "price": self.price,
             "quantity": self.quantity,
             "line_total": self.line_total,
-            "image": self.menu_item.image or "/static/images/food-placeholder.svg",
+            "image": self.menu_item.image or "/static/images/food-placeholder.jpg",
             "stock": self.menu_item.stock,
             "is_available": self.menu_item.is_available,
         }

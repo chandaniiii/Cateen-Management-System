@@ -79,7 +79,7 @@
         {% for item in popular %}
         <article class="food-card">
             <div class="food-card-image">
-                <img src="{{ item.image or url_for('static', filename='images/food-placeholder.svg') }}" alt="{{ item.name }}" loading="lazy">
+                <img src="{{ item.image or url_for('static', filename='images/food-placeholder.jpg') }}" alt="{{ item.name }}" loading="lazy">
                 <span class="food-badge">{{ item.category.name }}</span>
             </div>
             <div class="food-card-body">

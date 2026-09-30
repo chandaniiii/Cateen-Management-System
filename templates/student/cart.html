@@ -16,7 +16,7 @@
             {% for entry in items %}
             <div class="cart-item card">
                 <div class="cart-item-image">
-                    <img src="{{ entry.item.image or url_for('static', filename='images/food-placeholder.svg') }}" alt="{{ entry.item.name }}">
+                    <img src="{{ entry.item.image or url_for('static', filename='images/food-placeholder.jpg') }}" alt="{{ entry.item.name }}">
                 </div>
                 <div class="cart-item-info">
                     <span class="food-category-sm">{{ entry.item.category.name }}</span>
