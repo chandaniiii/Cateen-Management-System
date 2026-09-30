@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5eb"/>
+      <stop offset="100%" stop-color="#fed7aa"/>
+    </linearGradient>
+    <linearGradient id="samosaGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="70%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="samosa2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  
+  <!-- Plate -->
+  <ellipse cx="200" cy="180" rx="140" ry="60" fill="#f8fafc" filter="url(#shadow)"/>
+  <ellipse cx="200" cy="175" rx="125" ry="50" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+  
+  <!-- Samosa 1 (Left) -->
+  <g filter="url(#shadow)">
+    <path d="M150,90 Q110,180 100,195 Q140,210 185,190 Q165,135 150,90 Z" fill="url(#samosaGold)"/>
+    <path d="M100,195 Q140,210 185,190" fill="none" stroke="#78350f" stroke-width="3"/>
+    <!-- Crust crease -->
+    <path d="M150,90 Q145,145 140,198" fill="none" stroke="#b45309" stroke-width="2.5" opacity="0.6"/>
+  </g>
+  
+  <!-- Samosa 2 (Right) -->
+  <g filter="url(#shadow)">
+    <path d="M250,95 Q210,180 195,195 Q245,210 295,185 Q275,135 250,95 Z" fill="url(#samosa2)"/>
+    <path d="M195,195 Q245,210 295,185" fill="none" stroke="#78350f" stroke-width="3"/>
+    <!-- Crust crease -->
+    <path d="M250,95 Q248,145 245,198" fill="none" stroke="#78350f" stroke-width="2.5" opacity="0.6"/>
+  </g>
+  
+  <!-- Fried Green Chillies on side -->
+  <path d="M290,195 Q320,180 330,190" fill="none" stroke="#16a34a" stroke-width="5" stroke-linecap="round"/>
+  
+  <!-- Mint Chutney Dip -->
+  <circle cx="195" cy="145" r="16" fill="#15803d"/>
+  <circle cx="195" cy="145" r="13" fill="#22c55e"/>
+
+  <!-- Steam -->
+  <path d="M155,75 Q150,55 155,35" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+  <path d="M250,75 Q255,55 250,35" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+</svg>

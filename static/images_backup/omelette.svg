@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5eb"/>
+      <stop offset="100%" stop-color="#fed7aa"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  
+  <!-- Plate -->
+  <ellipse cx="200" cy="180" rx="145" ry="65" fill="#f1f5f9" filter="url(#shadow)"/>
+  <ellipse cx="200" cy="175" rx="135" ry="55" fill="#ffffff"/>
+  
+  <!-- Golden Masala Omelette Fold -->
+  <path d="M110,185 C110,140 220,130 250,180 C230,210 130,215 110,185 Z" fill="#fde047" filter="url(#shadow)"/>
+  
+  <!-- Onions, Green Chili, Tomato flecks -->
+  <circle cx="150" cy="170" r="3" fill="#16a34a"/>
+  <circle cx="190" cy="165" r="3.5" fill="#dc2626"/>
+  <circle cx="170" cy="185" r="3" fill="#9333ea"/>
+  <circle cx="210" cy="175" r="3" fill="#16a34a"/>
+  <circle cx="225" cy="160" r="2.5" fill="#dc2626"/>
+  
+  <!-- Pepper specks -->
+  <circle cx="160" cy="160" r="1.5" fill="#1e293b"/>
+  <circle cx="180" cy="175" r="1.5" fill="#1e293b"/>
+  <circle cx="200" cy="160" r="1.5" fill="#1e293b"/>
+
+  <!-- Two Toast Triangles on right -->
+  <polygon points="235,145 285,120 285,170" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+  <polygon points="250,155 300,130 300,180" fill="#fef08a" stroke="#b45309" stroke-width="2"/>
+
+  <!-- Steam -->
+  <path d="M165,130 Q155,110 165,90" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+  <path d="M195,125 Q205,105 195,85" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+</svg>

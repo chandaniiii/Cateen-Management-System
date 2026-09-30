@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5eb"/>
+      <stop offset="100%" stop-color="#fed7aa"/>
+    </linearGradient>
+    <linearGradient id="cone" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="vanilla" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#fef08a"/>
+    </linearGradient>
+    <linearGradient id="chocolate" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#451a03"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  
+  <ellipse cx="200" cy="265" rx="50" ry="12" fill="#cbd5e1" opacity="0.6"/>
+  
+  <g filter="url(#shadow)">
+    <!-- Waffle Cone -->
+    <polygon points="150,150 250,150 200,260" fill="url(#cone)"/>
+    <!-- Waffle Cone Grid -->
+    <line x1="160" y1="150" x2="200" y2="240" stroke="#78350f" stroke-width="1.5" opacity="0.5"/>
+    <line x1="180" y1="150" x2="210" y2="220" stroke="#78350f" stroke-width="1.5" opacity="0.5"/>
+    <line x1="220" y1="150" x2="190" y2="220" stroke="#78350f" stroke-width="1.5" opacity="0.5"/>
+    <line x1="240" y1="150" x2="200" y2="240" stroke="#78350f" stroke-width="1.5" opacity="0.5"/>
+    
+    <!-- Scoop 1 (Chocolate bottom scoop) -->
+    <circle cx="200" cy="140" r="45" fill="url(#chocolate)"/>
+    
+    <!-- Scoop 2 (Vanilla Top Scoop) -->
+    <circle cx="200" cy="95" r="42" fill="url(#vanilla)"/>
+    
+    <!-- Cherry on Top -->
+    <circle cx="200" cy="50" r="14" fill="#dc2626"/>
+    <!-- Cherry Stem -->
+    <path d="M200,45 Q215,25 225,20" fill="none" stroke="#15803d" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Colorful Sprinkles -->
+    <rect x="180" y="80" width="8" height="3" rx="1.5" fill="#ef4444" transform="rotate(20 180 80)"/>
+    <rect x="210" y="85" width="8" height="3" rx="1.5" fill="#3b82f6" transform="rotate(-30 210 85)"/>
+    <rect x="195" y="105" width="8" height="3" rx="1.5" fill="#10b981" transform="rotate(45 195 105)"/>
+    <rect x="175" y="100" width="8" height="3" rx="1.5" fill="#f59e0b" transform="rotate(-15 175 100)"/>
+  </g>
+</svg>

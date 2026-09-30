@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5eb"/>
+      <stop offset="100%" stop-color="#fed7aa"/>
+    </linearGradient>
+    <radialGradient id="jamun1" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#b45309"/>
+      <stop offset="60%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#451a03"/>
+    </radialGradient>
+    <radialGradient id="jamun2" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="60%" stop-color="#92400e"/>
+      <stop offset="100%" stop-color="#451a03"/>
+    </radialGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  
+  <!-- Dessert Bowl -->
+  <ellipse cx="200" cy="190" rx="120" ry="50" fill="#cbd5e1" filter="url(#shadow)"/>
+  <ellipse cx="200" cy="180" rx="110" ry="45" fill="#ffffff"/>
+  
+  <!-- Sugar Rose Syrup Pool (Chashni) -->
+  <ellipse cx="200" cy="180" rx="95" ry="35" fill="#f59e0b" opacity="0.6"/>
+  <ellipse cx="200" cy="178" rx="90" ry="30" fill="#d97706" opacity="0.4"/>
+  
+  <!-- Gulab Jamun 1 (Left) -->
+  <circle cx="165" cy="165" r="35" fill="url(#jamun1)" filter="url(#shadow)"/>
+  <!-- Shiny Syrup Glaze Highlight -->
+  <ellipse cx="155" cy="150" rx="10" ry="6" fill="#fde68a" opacity="0.6" transform="rotate(-30 155 150)"/>
+  
+  <!-- Gulab Jamun 2 (Right) -->
+  <circle cx="235" cy="165" r="35" fill="url(#jamun2)" filter="url(#shadow)"/>
+  <!-- Glaze Highlight -->
+  <ellipse cx="225" cy="150" rx="10" ry="6" fill="#fde68a" opacity="0.6" transform="rotate(-30 225 150)"/>
+  
+  <!-- Saffron Strands & Pistachio flakes -->
+  <ellipse cx="165" cy="140" rx="5" ry="2" fill="#15803d" transform="rotate(40 165 140)"/>
+  <ellipse cx="235" cy="140" rx="5" ry="2" fill="#15803d" transform="rotate(-25 235 140)"/>
+  <line x1="170" y1="160" x2="185" y2="155" stroke="#ef4444" stroke-width="2"/>
+  <line x1="220" y1="160" x2="210" y2="170" stroke="#ef4444" stroke-width="2"/>
+
+  <!-- Warm sweet steam -->
+  <path d="M165,115 Q155,95 165,75" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+  <path d="M235,115 Q245,95 235,75" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+</svg>

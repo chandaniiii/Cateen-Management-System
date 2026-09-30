@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5eb"/>
+      <stop offset="100%" stop-color="#fed7aa"/>
+    </linearGradient>
+    <linearGradient id="can" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b91c1c"/>
+      <stop offset="40%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  
+  <ellipse cx="200" cy="245" rx="60" ry="16" fill="#cbd5e1" opacity="0.6"/>
+  
+  <!-- Chilled Soda Can -->
+  <g filter="url(#shadow)">
+    <!-- Can Body -->
+    <path d="M160,85 L160,225 C160,238 240,238 240,225 L240,85 Z" fill="url(#can)"/>
+    <!-- Top Rim -->
+    <ellipse cx="200" cy="85" rx="40" ry="12" fill="#cbd5e1"/>
+    <ellipse cx="200" cy="85" rx="34" ry="9" fill="#94a3b8"/>
+    <!-- Pull tab -->
+    <ellipse cx="195" cy="85" rx="10" ry="5" fill="#f1f5f9"/>
+
+    <!-- Wave stripe -->
+    <path d="M160,140 Q200,165 240,135 L240,170 Q200,200 160,175 Z" fill="#ffffff" opacity="0.85"/>
+    
+    <!-- Ice condensation droplets -->
+    <circle cx="175" cy="115" r="2.5" fill="#ffffff" opacity="0.7"/>
+    <circle cx="178" cy="180" r="3" fill="#ffffff" opacity="0.7"/>
+    <circle cx="225" cy="130" r="2.5" fill="#ffffff" opacity="0.7"/>
+    <circle cx="220" cy="200" r="3" fill="#ffffff" opacity="0.7"/>
+    <circle cx="190" cy="215" r="2" fill="#ffffff" opacity="0.7"/>
+  </g>
+  
+  <!-- Ice Cubes floating / chilling beside -->
+  <rect x="250" y="195" width="30" height="30" rx="6" fill="#bae6fd" stroke="#7dd3fc" stroke-width="2" opacity="0.85" transform="rotate(20 250 195)"/>
+  <rect x="120" y="200" width="26" height="26" rx="5" fill="#bae6fd" stroke="#7dd3fc" stroke-width="2" opacity="0.8" transform="rotate(-15 120 200)"/>
+</svg>

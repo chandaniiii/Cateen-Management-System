@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5eb"/>
+      <stop offset="100%" stop-color="#fed7aa"/>
+    </linearGradient>
+    <linearGradient id="cup" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="coffee" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#451a03"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  
+  <!-- Saucer / Plate -->
+  <ellipse cx="200" cy="225" rx="110" ry="30" fill="#cbd5e1" filter="url(#shadow)"/>
+  <ellipse cx="200" cy="220" rx="100" ry="25" fill="#f8fafc"/>
+  
+  <!-- Cup Body -->
+  <g filter="url(#shadow)">
+    <!-- Cup Handle -->
+    <path d="M260,140 C300,140 300,190 255,190" fill="none" stroke="#e2e8f0" stroke-width="14" stroke-linecap="round"/>
+    <!-- Cup -->
+    <path d="M140,120 L155,210 C155,220 245,220 245,210 L260,120 Z" fill="url(#cup)"/>
+    <!-- Rim -->
+    <ellipse cx="200" cy="120" rx="60" ry="20" fill="#f1f5f9"/>
+    <!-- Coffee Surface -->
+    <ellipse cx="200" cy="122" rx="54" ry="16" fill="url(#coffee)"/>
+    <!-- Latte Art Foam Heart -->
+    <path d="M200,128 C190,118 180,122 190,130 Q200,138 200,138 Q200,138 210,130 C220,122 210,118 200,128 Z" fill="#fef3c7"/>
+  </g>
+  
+  <!-- Aromatic Coffee Steam -->
+  <path d="M185,95 Q175,70 185,45" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+  <path d="M215,90 Q225,65 215,40" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+</svg>
