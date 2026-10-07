@@ -140,6 +140,20 @@ class CartManager:
         """Calculates and returns total price of items in cart."""
         return sum(item.line_total for item in self.get_cart_items())
 
+    def get_delivery_charge(self, delivery_type: str = "delivery") -> float:
+        """Calculates delivery charge based on delivery option and cart subtotal."""
+        if delivery_type == "pickup":
+            return 0.0
+        from config import Config
+        subtotal = self.get_subtotal()
+        if subtotal >= Config.FREE_DELIVERY_THRESHOLD:
+            return 0.0
+        return float(Config.DEFAULT_DELIVERY_CHARGE)
+
+    def get_grand_total(self, delivery_type: str = "delivery") -> float:
+        """Calculates grand total payable including delivery charge."""
+        return self.get_subtotal() + self.get_delivery_charge(delivery_type)
+
     def validate_for_checkout(self) -> List[CartItem]:
         """
         Validates all cart items against live inventory for checkout.
@@ -147,7 +161,7 @@ class CartManager:
         """
         cart_items = self.get_cart_items()
         if not cart_items:
-            raise ValueError("Your cart is empty. Please add items before checkout.")
+            raise ValueError("Your cart is empty. Please add food items before checkout.")
 
         for cart_item in cart_items:
             item = cart_item.menu_item
@@ -157,3 +171,4 @@ class CartManager:
                 )
 
         return cart_items
+

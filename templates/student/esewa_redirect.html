@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connecting to eSewa...</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .esewa-redirect-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            padding: 2rem;
+            text-align: center;
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .redirect-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+        .esewa-badge-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #eaf7e6;
+            color: #60bb46;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            font-size: 2rem;
+            margin-bottom: 1.25rem;
+        }
+        .redirect-spinner {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(96, 187, 70, 0.2);
+            border-radius: 50%;
+            border-top-color: #60bb46;
+            animation: spin 1s ease-in-out infinite;
+            margin-top: 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .amount-display {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body class="esewa-redirect-screen">
+    <div class="redirect-card">
+        <div class="esewa-badge-logo">
+            <i class="fas fa-wallet"></i>
+        </div>
+        <h2>Redirecting to eSewa</h2>
+        <p class="text-muted">Please wait while we transfer you securely to the official eSewa payment gateway...</p>
+        
+        <div class="amount-display">
+            Rs. {{ '%.0f'|format(order.total_amount) }}
+        </div>
+
+        <div class="redirect-spinner"></div>
+        <p class="text-muted" style="margin-top: 1rem; font-size: 0.875rem;">
+            Do not refresh or close this browser window.
+        </p>
+
+        <!-- Official eSewa Form -->
+        <form id="esewaForm" method="POST" action="{{ esewa_data.payment_url }}">
+            {% for key, value in esewa_data.fields.items() %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endfor %}
+            <noscript>
+                <div style="margin-top: 1.5rem;">
+                    <p>JavaScript is disabled in your browser. Please click below to proceed:</p>
+                    <button type="submit" class="btn btn-primary btn-block">Proceed to eSewa</button>
+                </div>
+            </noscript>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('esewaForm');
+            if (form) {
+                // Short timeout to ensure smooth transition
+                setTimeout(() => {
+                    form.submit();
+                }, 800);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -2,12 +2,12 @@
     <div class="container footer-grid">
         <div class="footer-brand">
             <div class="footer-logo">
-                <span class="brand-icon">🍽️</span>
-                <h3>Campus Canteen</h3>
+                <span class="brand-icon">🛵</span>
+                <h3>FoodExpress</h3>
             </div>
-            <p>Your premier campus dining platform. Order online in seconds, skip the rush hour lines, and enjoy fresh homemade food.</p>
+            <p>Your premier online food delivery service. Order delicious meals from top kitchens, enjoy lightning-fast doorstep delivery, and track your food in real-time.</p>
             <div class="footer-socials">
-                <span class="badge badge-subtle">College Canteen System v1.0</span>
+                <span class="badge badge-subtle"><i class="fas fa-wallet" style="color: #60bb46;"></i> Official eSewa & COD Payments</span>
             </div>
         </div>
         <div class="footer-links">
@@ -16,29 +16,30 @@
                 <li><a href="{{ url_for('main.index') }}">Home</a></li>
                 <li><a href="{{ url_for('main.index') }}#popular">Popular Foods</a></li>
                 <li><a href="{{ url_for('main.index') }}#how-it-works">How It Works</a></li>
-                <li><a href="{{ url_for('main.about') }}">About Canteen</a></li>
+                <li><a href="{{ url_for('main.about') }}">About FoodExpress</a></li>
             </ul>
         </div>
         <div class="footer-links">
             <h4>User Portals</h4>
             <ul>
-                <li><a href="{{ url_for('auth.login') }}">Student / Staff Login</a></li>
-                <li><a href="{{ url_for('auth.register') }}">Student Registration</a></li>
-                <li><a href="{{ url_for('auth.login') }}">Staff Portal</a></li>
+                <li><a href="{{ url_for('auth.login') }}">Customer Sign In</a></li>
+                <li><a href="{{ url_for('auth.register') }}">Create Account</a></li>
+                <li><a href="{{ url_for('auth.login') }}">Restaurant Staff Portal</a></li>
                 <li><a href="{{ url_for('auth.login') }}">Admin Console</a></li>
             </ul>
         </div>
         <div class="footer-contact">
-            <h4>Canteen Contact</h4>
-            <p><i class="fas fa-map-marker-alt"></i> College Main Campus Block<br>Kathmandu, Nepal</p>
-            <p><i class="fas fa-clock"></i> 7:00 AM – 8:00 PM (Daily)</p>
-            <p><i class="fas fa-phone-alt"></i> +977 9801111111</p>
+            <h4>Store & Delivery Info</h4>
+            <p><i class="fas fa-map-marker-alt"></i> FoodExpress Central Kitchen & Hub<br>Kathmandu, Nepal</p>
+            <p><i class="fas fa-clock"></i> 7:00 AM – 10:00 PM (Daily Delivery)</p>
+            <p><i class="fas fa-phone-alt"></i> +977 9801111111 / 9841234567</p>
         </div>
     </div>
     <div class="footer-bottom">
         <div class="container footer-bottom-inner">
-            <p>&copy; {{ current_year }} Campus Canteen Management System. All rights reserved.</p>
-            <p class="footer-demo-tag"><i class="fas fa-shield-alt"></i> Secure College Dining Platform</p>
+            <p>&copy; {{ current_year }} FoodExpress Online Food Delivery System. All rights reserved.</p>
+            <p class="footer-demo-tag"><i class="fas fa-shield-alt"></i> Verified eSewa & Secure Checkout</p>
         </div>
     </div>
 </footer>
+

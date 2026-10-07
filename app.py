@@ -84,21 +84,27 @@ def seed_database():
         role="admin",
         status="active",
         phone="9801111111",
+        address="Central Food Store, Ground Floor",
+        city="Kathmandu",
     )
     staff = User(
-        name="Canteen Staff",
+        name="Restaurant Staff",
         email="staff@canteen.com",
         password_hash=password_hash,
         role="staff",
         status="active",
         phone="9802222222",
+        address="Kitchen & Dispatch Center",
+        city="Kathmandu",
     )
     student = User(
         name="Aayush Sharma",
         email="student@college.com",
         password_hash=password_hash,
-        student_id="STU2024001",
+        student_id="CUST-2024001",
         phone="9841234567",
+        address="Putalisadak, Ward 28, House #14",
+        city="Kathmandu",
         role="student",
         status="active",
     )
@@ -106,8 +112,10 @@ def seed_database():
         name="Pooja Thapa",
         email="pooja@college.com",
         password_hash=password_hash,
-        student_id="STU2024045",
+        student_id="CUST-2024045",
         phone="9812345678",
+        address="New Baneshwor, Near Chowk",
+        city="Kathmandu",
         role="student",
         status="active",
     )
@@ -115,8 +123,10 @@ def seed_database():
         name="Bikash KC",
         email="bikash@college.com",
         password_hash=password_hash,
-        student_id="STU2024089",
+        student_id="CUST-2024089",
         phone="9860123456",
+        address="Jhamsikhel, Ward 3",
+        city="Lalitpur",
         role="student",
         status="active",
     )
@@ -128,7 +138,7 @@ def seed_database():
         ("Breakfast", "Fresh morning meals, bakery, and light breakfast items"),
         ("Snacks", "Quick crispy bites, fries, and afternoon appetizers"),
         ("Main Course", "Hearty traditional and filling meals for lunch and dinner"),
-        ("Fast Food", "Burgers, pizzas, sandwiches, and student favorites"),
+        ("Fast Food", "Burgers, pizzas, sandwiches, and popular favorites"),
         ("Drinks", "Hot teas, brewed coffee, cold beverages, and fresh lassi"),
         ("Desserts", "Sweet treats and dessert delights to finish your meal"),
     ]
@@ -142,7 +152,7 @@ def seed_database():
     # 3. Menu Items with realistic Nepalese pricing in NPR & dedicated SVGs
     menu_data = [
         ("Steam Momo (Buff/Veg)", "Main Course", "Authentic freshly steamed dumplings served with hot spicy sesame tomato chutney", 120, 50, 10, "/static/images/momo.jpg"),
-        ("Veg / Chicken Chowmein", "Main Course", "Wok-tossed noodles with shredded vegetables and special canteen spice blend", 100, 45, 10, "/static/images/chowmein.jpg"),
+        ("Veg / Chicken Chowmein", "Main Course", "Wok-tossed noodles with shredded vegetables and special kitchen spice blend", 100, 45, 10, "/static/images/chowmein.jpg"),
         ("Egg Fried Rice", "Main Course", "Aromatic stir-fried rice loaded with scrambled egg, garden peas, and spring onions", 110, 35, 10, "/static/images/fried-rice.jpg"),
         ("Special Nepali Dal Bhat Set", "Main Course", "Complete traditional thali with steamed rice, yellow lentils, seasonal tarkari, and pickle", 130, 30, 8, "/static/images/dal-bhat.jpg"),
         ("Crispy Samosa (2 pcs)", "Snacks", "Golden crisp pastry triangles filled with spiced cumin potatoes and green peas", 30, 80, 15, "/static/images/samosa.jpg"),
@@ -152,7 +162,7 @@ def seed_database():
         ("Golden French Fries", "Snacks", "Crispy fried potato batons lightly salted and served with tomato ketchup", 90, 60, 12, "/static/images/fries.jpg"),
         ("Aloo Paratha with Curd", "Breakfast", "Warm whole wheat stuffed flatbread served with fresh curd and spicy mixed pickle", 70, 40, 10, "/static/images/paratha.jpg"),
         ("Masala Omelette & Toast", "Breakfast", "Fluffy 2-egg omelette with onions, green chillies, coriander, and toasted butter bread", 90, 35, 8, "/static/images/omelette.jpg"),
-        ("Hot Brewed Coffee", "Drinks", "Rich freshly brewed aromatic milk coffee to power through study sessions", 80, 100, 20, "/static/images/coffee.jpg"),
+        ("Hot Brewed Coffee", "Drinks", "Rich freshly brewed aromatic milk coffee to power through your day", 80, 100, 20, "/static/images/coffee.jpg"),
         ("Nepali Masala Chiya", "Drinks", "Classic spiced milk tea infused with cardamom, ginger, and cloves", 40, 120, 25, "/static/images/chiya.jpg"),
         ("Cold Drinks (300ml)", "Drinks", "Chilled soda bottle (Coke, Fanta, Sprite)", 60, 80, 15, "/static/images/cold-drinks.jpg"),
         ("Sweet Curd Lassi", "Drinks", "Chilled creamy yogurt smoothie topped with sliced almonds", 70, 50, 10, "/static/images/lassi.jpg"),
@@ -178,15 +188,22 @@ def seed_database():
 
     db.session.flush()
 
-    # 4. Sample Orders
+    # 4. Sample Food Delivery Orders
     now = datetime.now(timezone.utc)
     order1 = Order(
         user_id=student.id,
-        total_amount=200.00,
+        total_amount=250.00,
         status="completed",
         payment_method="esewa",
         payment_status="completed",
-        pickup_time="ASAP",
+        delivery_type="delivery",
+        delivery_address="Putalisadak, Ward 28, House #14",
+        city_area="Kathmandu",
+        landmark="Opposite Kumari Bank",
+        phone_number=student.phone,
+        delivery_charge=50.00,
+        transaction_id="ESEWA-TXN-001293",
+        pickup_time="Delivered ASAP",
         created_at=now - timedelta(days=3),
     )
     order2 = Order(
@@ -195,47 +212,80 @@ def seed_database():
         status="completed",
         payment_method="khalti",
         payment_status="completed",
+        delivery_type="pickup",
+        delivery_address="Store Counter Pickup",
+        city_area="Kathmandu",
+        phone_number=student.phone,
+        delivery_charge=0.00,
+        transaction_id="KHALTI-TXN-881204",
         pickup_time="1:00 PM",
         created_at=now - timedelta(days=2),
     )
     order3 = Order(
         user_id=student2.id,
-        total_amount=300.00,
+        total_amount=350.00,
         status="completed",
         payment_method="qr",
         payment_status="completed",
+        delivery_type="delivery",
+        delivery_address="New Baneshwor, Near Chowk",
+        city_area="Kathmandu",
+        landmark="Near Civil Bank",
+        phone_number=student2.phone,
+        delivery_charge=50.00,
+        transaction_id="QR-FONEPAY-331002",
         pickup_time="12:00 PM",
         created_at=now - timedelta(days=1),
     )
     order4 = Order(
         user_id=student.id,
-        total_amount=160.00,
+        total_amount=210.00,
         status="ready",
         payment_method="cash",
         payment_status="pending",
+        delivery_type="delivery",
+        delivery_address="Putalisadak, Ward 28, House #14",
+        city_area="Kathmandu",
+        phone_number=student.phone,
+        delivery_charge=50.00,
+        transaction_id="COD-ORD-4",
         pickup_time="ASAP",
         created_at=now - timedelta(minutes=25),
     )
     order5 = Order(
         user_id=student3.id,
-        total_amount=220.00,
+        total_amount=270.00,
         status="preparing",
         payment_method="esewa",
         payment_status="completed",
+        delivery_type="delivery",
+        delivery_address="Jhamsikhel, Ward 3",
+        city_area="Lalitpur",
+        landmark="Near St. Mary's School",
+        phone_number=student3.phone,
+        delivery_charge=50.00,
+        transaction_id="ESEWA-TXN-005182",
         pickup_time="12:30 PM",
         created_at=now - timedelta(minutes=15),
     )
     order6 = Order(
         user_id=student2.id,
-        total_amount=120.00,
+        total_amount=170.00,
         status="confirmed",
         payment_method="qr",
         payment_status="completed",
+        delivery_type="delivery",
+        delivery_address="New Baneshwor, Near Chowk",
+        city_area="Kathmandu",
+        phone_number=student2.phone,
+        delivery_charge=50.00,
+        transaction_id="QR-FONEPAY-991203",
         pickup_time="1:00 PM",
         created_at=now - timedelta(minutes=5),
     )
     db.session.add_all([order1, order2, order3, order4, order5, order6])
     db.session.flush()
+
 
     # Order Items
     momo = items_map["Steam Momo (Buff/Veg)"]

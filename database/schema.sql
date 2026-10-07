@@ -26,6 +26,8 @@ CREATE TABLE `users` (
     `password_hash` VARCHAR(256) NOT NULL,
     `student_id` VARCHAR(50) NULL,
     `phone` VARCHAR(20) NULL,
+    `address` VARCHAR(255) NULL,
+    `city` VARCHAR(100) NULL,
     `role` ENUM('student', 'staff', 'admin') NOT NULL DEFAULT 'student',
     `status` ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -66,12 +68,21 @@ CREATE TABLE `orders` (
     `payment_method` ENUM('cash', 'esewa', 'khalti', 'qr') NOT NULL DEFAULT 'cash',
     `payment_status` ENUM('pending', 'completed', 'failed') NOT NULL DEFAULT 'pending',
     `pickup_time` VARCHAR(50) NOT NULL DEFAULT 'ASAP',
+    `delivery_type` VARCHAR(20) NOT NULL DEFAULT 'delivery',
+    `delivery_address` VARCHAR(255) NULL,
+    `city_area` VARCHAR(100) NULL,
+    `landmark` VARCHAR(150) NULL,
+    `phone_number` VARCHAR(30) NULL,
+    `delivery_notes` TEXT NULL,
+    `delivery_charge` DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    `transaction_id` VARCHAR(100) NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT `fk_order_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     INDEX `idx_order_user` (`user_id`),
     INDEX `idx_order_status` (`status`),
     INDEX `idx_order_created_at` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 -- 7. Order Items Table
 CREATE TABLE `order_items` (

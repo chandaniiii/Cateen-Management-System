@@ -117,66 +117,133 @@ def food_detail(item_id):
 @login_required
 @role_required("student")
 def cart():
+    from config import Config
+    from services.cart_manager import CartManager
+
     cart_data = get_cart()
+    manager = CartManager(cart_data)
     items = []
-    subtotal = 0
-    for item_id, qty in cart_data.items():
-        menu_item = MenuItem.query.get(int(item_id))
-        if menu_item:
-            line_total = float(menu_item.price) * qty
-            subtotal += line_total
-            items.append({"item": menu_item, "quantity": qty, "line_total": line_total})
-    return render_template("student/cart.html", items=items, subtotal=subtotal, total=subtotal)
+    subtotal = 0.0
+
+    for cart_item in manager.get_cart_items():
+        items.append({
+            "item": cart_item.menu_item,
+            "quantity": cart_item.quantity,
+            "line_total": cart_item.line_total,
+        })
+        subtotal += cart_item.line_total
+
+    delivery_charge = manager.get_delivery_charge("delivery") if items else 0.0
+    total = subtotal + delivery_charge
+
+    return render_template(
+        "student/cart.html",
+        items=items,
+        subtotal=subtotal,
+        delivery_charge=delivery_charge,
+        total=total,
+        free_delivery_threshold=Config.FREE_DELIVERY_THRESHOLD,
+    )
 
 
 @student_bp.route("/checkout", methods=["GET", "POST"])
 @login_required
 @role_required("student")
 def checkout():
+    from config import Config
+    from models.user import User
+    from services.cart_manager import CartManager
+    from services.payment_processor import EsewaPaymentHandler
+
+    user = User.query.get(session["user_id"])
     cart_data = get_cart()
     if not cart_data:
-        flash("Your cart is empty.", "warning")
+        flash("Your cart is empty. Please add delicious food items before checkout.", "warning")
         return redirect(url_for("student.menu"))
+
+    manager = CartManager(cart_data)
+    try:
+        cart_items = manager.validate_for_checkout()
+    except ValueError as err:
+        flash(str(err), "danger")
+        return redirect(url_for("student.cart"))
 
     items = []
-    subtotal = 0
-    for item_id, qty in cart_data.items():
-        menu_item = MenuItem.query.get(int(item_id))
-        if not menu_item:
-            continue
-        if menu_item.stock < qty or not menu_item.is_available:
-            flash(f"{menu_item.name} is not available in requested quantity.", "danger")
-            return redirect(url_for("student.cart"))
-        line_total = float(menu_item.price) * qty
-        subtotal += line_total
-        items.append({"item": menu_item, "quantity": qty, "line_total": line_total})
+    subtotal = 0.0
+    for cart_item in cart_items:
+        items.append({
+            "item": cart_item.menu_item,
+            "quantity": cart_item.quantity,
+            "line_total": cart_item.line_total,
+        })
+        subtotal += cart_item.line_total
 
-    if not items:
-        flash("Your cart is empty.", "warning")
-        return redirect(url_for("student.menu"))
+    default_delivery_charge = manager.get_delivery_charge("delivery")
+    default_total = subtotal + default_delivery_charge
 
     if request.method == "POST":
-        from models.user import User
-
-        user = User.query.get(session["user_id"])
-        payment_method = request.form.get("payment_method", "cash")
-        pickup_time = request.form.get("pickup_time", "ASAP")
+        delivery_type = request.form.get("delivery_type", "delivery").strip()
+        pickup_time = request.form.get("pickup_time", "ASAP").strip()
+        payment_method = request.form.get("payment_method", "cash").strip()
         name = request.form.get("name", user.name).strip()
-        student_id = request.form.get("student_id", user.student_id or "").strip()
         phone = request.form.get("phone", user.phone or "").strip()
+        address = request.form.get("address", user.address or "").strip()
+        city_area = request.form.get("city_area", user.city or "Kathmandu").strip()
+        landmark = request.form.get("landmark", "").strip()
+        delivery_notes = request.form.get("delivery_notes", "").strip()
+
+        # Validation
+        errors = []
+        if not phone or len(phone) < 7:
+            errors.append("A valid phone number is required for order contact.")
+        if delivery_type == "delivery" and (not address or len(address) < 3):
+            errors.append("Delivery address is required for food delivery.")
 
         valid_payments = ("cash", "esewa", "khalti", "qr")
         if payment_method not in valid_payments:
-            flash("Invalid payment method.", "danger")
-            return render_template("student/checkout.html", items=items, subtotal=subtotal, total=subtotal)
+            errors.append(f"Invalid payment method selected. Choose from: {', '.join(valid_payments)}")
 
+        if errors:
+            for err in errors:
+                flash(err, "danger")
+            return render_template(
+                "student/checkout.html",
+                user=user,
+                items=items,
+                subtotal=subtotal,
+                delivery_charge=default_delivery_charge if delivery_type == "delivery" else 0.0,
+                total=default_total if delivery_type == "delivery" else subtotal,
+                free_delivery_threshold=Config.FREE_DELIVERY_THRESHOLD,
+                default_delivery_fee=Config.DEFAULT_DELIVERY_CHARGE,
+            )
+
+        # Calculate final charges based on delivery type
+        delivery_charge = manager.get_delivery_charge(delivery_type)
+        total_amount = subtotal + delivery_charge
+
+        # Save user address preference if provided
+        if address and not user.address:
+            user.address = address
+        if phone and not user.phone:
+            user.phone = phone
+        if city_area and not user.city:
+            user.city = city_area
+
+        # Create Order
         order = Order(
             user_id=user.id,
-            total_amount=subtotal,
+            total_amount=total_amount,
             status="pending",
             payment_method=payment_method,
-            payment_status="completed" if payment_method != "cash" else "pending",
+            payment_status="pending",
             pickup_time=pickup_time,
+            delivery_type=delivery_type,
+            delivery_address=address if delivery_type == "delivery" else "Store Counter Pickup",
+            city_area=city_area if delivery_type == "delivery" else "",
+            landmark=landmark if delivery_type == "delivery" else "",
+            phone_number=phone,
+            delivery_notes=delivery_notes,
+            delivery_charge=delivery_charge,
         )
         db.session.add(order)
         db.session.flush()
@@ -184,9 +251,6 @@ def checkout():
         for entry in items:
             menu_item = entry["item"]
             qty = entry["quantity"]
-            menu_item.stock -= qty
-            if menu_item.stock <= 0:
-                menu_item.is_available = False
             db.session.add(
                 OrderItem(
                     order_id=order.id,
@@ -196,11 +260,148 @@ def checkout():
                 )
             )
 
+        # Process payment branch
+        if payment_method == "esewa":
+            esewa_handler = EsewaPaymentHandler()
+            success_url = url_for("student.esewa_success", _external=True)
+            failure_url = url_for("student.esewa_failure", order_id=order.id, _external=True)
+            esewa_data = esewa_handler.prepare_payment_request(
+                order=order,
+                success_url=success_url,
+                failure_url=failure_url,
+            )
+            order.transaction_id = esewa_data["transaction_uuid"]
+            db.session.commit()
+            return render_template("student/esewa_redirect.html", order=order, esewa_data=esewa_data)
+
+        elif payment_method == "cash":
+            # Cash on Delivery / Cash on Pickup: deduct inventory and confirm order
+            for entry in items:
+                menu_item = entry["item"]
+                qty = entry["quantity"]
+                menu_item.stock -= qty
+                if menu_item.stock <= 0:
+                    menu_item.is_available = False
+            order.transaction_id = f"COD-ORD-{order.id}"
+            db.session.commit()
+            save_cart({})
+            flash(
+                f"Order #{order.id} placed successfully! Please pay Rs. {total_amount:.0f} in cash upon food arrival.",
+                "success",
+            )
+            return redirect(url_for("student.order_confirmation", order_id=order.id))
+
+        else:
+            # Khalti / QR simulated digital payment flow
+            for entry in items:
+                menu_item = entry["item"]
+                qty = entry["quantity"]
+                menu_item.stock -= qty
+                if menu_item.stock <= 0:
+                    menu_item.is_available = False
+            order.payment_status = "completed"
+            order.status = "confirmed"
+            order.transaction_id = f"{payment_method.upper()}-TXN-{order.id}"
+            db.session.commit()
+            save_cart({})
+            flash(f"Order #{order.id} confirmed with {payment_method.upper()} payment!", "success")
+            return redirect(url_for("student.order_confirmation", order_id=order.id))
+
+    return render_template(
+        "student/checkout.html",
+        user=user,
+        items=items,
+        subtotal=subtotal,
+        delivery_charge=default_delivery_charge,
+        total=default_total,
+        free_delivery_threshold=Config.FREE_DELIVERY_THRESHOLD,
+        default_delivery_fee=Config.DEFAULT_DELIVERY_CHARGE,
+    )
+
+
+@student_bp.route("/payment/esewa/success", methods=["GET"])
+@login_required
+@role_required("student")
+def esewa_success():
+    """
+    eSewa payment success callback handler.
+    Decodes response data, verifies signature and status, confirms order and deducts inventory.
+    """
+    from services.payment_processor import EsewaPaymentHandler
+
+    encoded_data = request.args.get("data")
+    if not encoded_data:
+        flash("No response data received from eSewa payment gateway.", "danger")
+        return redirect(url_for("student.cart"))
+
+    esewa_handler = EsewaPaymentHandler()
+    verification = esewa_handler.verify_response(encoded_data)
+
+    if not verification.get("verified"):
+        flash(
+            f"eSewa payment verification failed: {verification.get('error', 'Unverified transaction')}. Please contact support.",
+            "danger",
+        )
+        return redirect(url_for("student.cart"))
+
+    transaction_uuid = verification.get("transaction_uuid", "")
+    order = None
+
+    if transaction_uuid:
+        order = Order.query.filter_by(transaction_id=transaction_uuid).first()
+        if not order and "-" in transaction_uuid:
+            try:
+                parts = transaction_uuid.split("-")
+                if len(parts) >= 2 and parts[1].isdigit():
+                    order = Order.query.get(int(parts[1]))
+            except (ValueError, IndexError):
+                pass
+
+    if not order or order.user_id != session["user_id"]:
+        flash("Order associated with the verified eSewa payment could not be located.", "danger")
+        return redirect(url_for("student.cart"))
+
+    # If order is not yet marked completed, deduct stock and update status
+    if order.payment_status != "completed":
+        for item in order.items:
+            menu_item = item.menu_item
+            if menu_item:
+                menu_item.stock = max(0, menu_item.stock - item.quantity)
+                if menu_item.stock <= 0:
+                    menu_item.is_available = False
+
+        order.payment_status = "completed"
+        order.status = "confirmed"
+        order.transaction_id = verification.get("transaction_code") or order.transaction_id
         db.session.commit()
         save_cart({})
-        return redirect(url_for("student.order_confirmation", order_id=order.id))
 
-    return render_template("student/checkout.html", items=items, subtotal=subtotal, total=subtotal)
+    flash("eSewa payment verified successfully! Your food order is confirmed.", "success")
+    return redirect(url_for("student.order_confirmation", order_id=order.id))
+
+
+@student_bp.route("/payment/esewa/failure", methods=["GET"])
+@login_required
+@role_required("student")
+def esewa_failure():
+    """
+    eSewa payment failure / cancellation callback handler.
+    Preserves customer cart so they can retry or switch payment method.
+    """
+    order_id = request.args.get("order_id")
+    if order_id:
+        order = Order.query.filter_by(id=order_id, user_id=session["user_id"]).first()
+        if order and order.payment_status == "pending" and order.status == "pending":
+            order.payment_status = "failed"
+            order.status = "cancelled"
+            db.session.commit()
+
+    flash(
+        "eSewa payment was cancelled or could not be completed. Your cart has been saved so you can try again or choose Cash on Delivery.",
+        "warning",
+    )
+    return redirect(url_for("student.checkout"))
+
 
 
 @student_bp.route("/order/<int:order_id>/confirmation")
@@ -298,25 +499,24 @@ def profile():
 @api_login_required
 @api_role_required("student")
 def api_get_cart():
+    from services.cart_manager import CartManager
     cart_data = get_cart()
+    manager = CartManager(cart_data)
     items = []
-    subtotal = 0
-    for item_id, qty in cart_data.items():
-        menu_item = MenuItem.query.get(int(item_id))
-        if menu_item:
-            line_total = float(menu_item.price) * qty
-            subtotal += line_total
-            items.append(
-                {
-                    "menu_item_id": menu_item.id,
-                    "name": menu_item.name,
-                    "price": float(menu_item.price),
-                    "quantity": qty,
-                    "line_total": line_total,
-                    "image": menu_item.image or "/static/images/food-placeholder.jpg",
-                }
-            )
-    return jsonify({"items": items, "subtotal": subtotal, "total": subtotal, "count": cart_count()})
+    subtotal = 0.0
+    for cart_item in manager.get_cart_items():
+        subtotal += cart_item.line_total
+        items.append(cart_item.to_dict())
+    delivery_charge = manager.get_delivery_charge("delivery") if items else 0.0
+    total = subtotal + delivery_charge
+    return jsonify({
+        "items": items,
+        "subtotal": subtotal,
+        "delivery_charge": delivery_charge,
+        "total": total,
+        "count": cart_count(),
+    })
+
 
 
 @student_bp.route("/api/cart/add", methods=["POST"])

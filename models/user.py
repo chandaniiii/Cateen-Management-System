@@ -14,6 +14,8 @@ class User(db.Model):
     password_hash = db.Column(db.String(256), nullable=False)
     student_id = db.Column(db.String(50), nullable=True)
     phone = db.Column(db.String(20), nullable=True)
+    address = db.Column(db.String(255), nullable=True)
+    city = db.Column(db.String(100), nullable=True)
     role = db.Column(db.Enum("student", "staff", "admin", name="user_roles"), default="student", nullable=False)
     status = db.Column(db.Enum("active", "inactive", name="user_status"), default="active", nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
@@ -34,7 +36,11 @@ class User(db.Model):
             "email": self.email,
             "student_id": self.student_id,
             "phone": self.phone,
+            "address": self.address,
+            "city": self.city,
             "role": self.role,
+            "display_role": "Customer" if self.role == "student" else self.role.title(),
             "status": self.status,
             "created_at": self.created_at.isoformat() if self.created_at else None,
         }
+
